@@ -1,0 +1,31 @@
+{
+    "name": "afiqiqmal/esolat",
+    "description": "Api Parcel Tracking API",
+    "keywords": ["php", "parcel"],
+    "license": "MIT",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Hafiq",
+            "email": "hafiqiqmal@gmail.com",
+            "homepage": "https://github.com/afiqiqmal"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/dom-crawler": "^4.0",
+        "symfony/css-selector": "^4.0",
+        "nesbot/carbon": "1.25.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "afiqiqmal\\ESolat\\": "src/",
+            "afiqiqmal\\Library\\": "library/"
+        },
+        "files": ["helper/helpers.php"]
+    }
+}
