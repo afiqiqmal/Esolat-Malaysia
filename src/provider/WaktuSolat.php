@@ -2,6 +2,7 @@
 
 namespace Afiqiqmal\ESolat\Provider;
 
+use afiqiqmal\ESolat\Sources\Location;
 use afiqiqmal\Library\Constant;
 use afiqiqmal\Library\SolatUtils;
 use Carbon\Carbon;
@@ -17,13 +18,14 @@ use Symfony\Component\DomCrawler\Crawler;
 class WaktuSolat
 {
     private $url = 'http://www.e-solat.gov.my/web/muatturun.php';
-    private $year = 2018;
+    private $year = null;
     private $month = null;
     private $zone = null;
     private $state = null;
-    private $type = 2;
+    private $type = null;
+    private $type_name = null;
     private $chosen_date = null;
-    private $language = 'en';
+    private $language = SOLAT_LANGUAGE_EN;
 
     public function year($year)
     {
@@ -52,6 +54,7 @@ class WaktuSolat
     public function displayAs($type)
     {
         $this->type = $type;
+        $this->type_name = SolatUtils::filterType($type);
         return $this;
     }
 
@@ -65,6 +68,16 @@ class WaktuSolat
     {
         if (!$this->zone) {
             return error_response('Zone Is Needed! Please refer to zone code');
+        } else {
+            $this->zone = Location::getLocation($this->zone);
+            if (!$this->zone) {
+                return error_response('Zone is Invalid');
+            }
+        }
+
+        if (!$this->type) {
+            $this->type = Constant::WEEK_VAL;
+            $this->type_name = SolatUtils::filterType($this->type);
         }
 
         if (!$this->year) {
@@ -73,9 +86,19 @@ class WaktuSolat
 
         if (!$this->month) {
             $this->month = date('m');
+        } else {
+             if ($this->month != date('m')) {
+                 $this->type = Constant::YEAR_VAL;
+                 $this->type_name = SolatUtils::filterType($this->type);
+             }
         }
 
-        if ($this->type == 1) {
+        if (!$this->type_name) {
+            return error_response("Given type: {$this->type} is not the correct format filter. Please refer to doc");
+        }
+
+        // filter check for using day
+        if ($this->type == Constant::DAY_VAL) {
             if ($this->chosen_date) {
                 $date = Carbon::parse($this->chosen_date);
             } else {
@@ -87,7 +110,8 @@ class WaktuSolat
             $this->year = $date->year;
         }
 
-        if ($this->type == 4) {
+        //filter check for using year
+        if ($this->type == 4 && $this->month == date('m')) {
             $data = [];
             foreach (Constant::ALL_MONTH as $month) {
                 $this->month = $month;
@@ -112,8 +136,8 @@ class WaktuSolat
                     'year' => $this->year,
                     'bulan' => $this->month,
                     'lang' => $this->language,
-                    'zone' => $this->zone,
-                    'jenis' => SolatUtils::filterType($this->type)
+                    'zone' => $this->zone[2],
+                    'jenis' => $this->type_name
                 ])
                 ->getRaw()
                 ->fetch();
@@ -142,6 +166,7 @@ class WaktuSolat
                         $timeline[Constant::WAKTU_SOLAT[$key-2]] = Carbon::createFromFormat('d M Y H:i', "$date {$this->year} $row")->timestamp;
                     }
                 }
+
                 $date = Carbon::createFromFormat('d M Y', "$date {$this->year}");
                 $data['date'] = $date->toDateString();
                 $data['day'] = $date->format('l');
@@ -149,14 +174,16 @@ class WaktuSolat
                 return $data;
             });
 
-            if ($this->type == 1) {
+            if ($this->type == Constant::DAY_VAL) {
                 $result = SolatUtils::searchByDate($result, $this->chosen_date);
             }
 
             return [
                 'month' => $this->month,
                 'year' => $this->year,
-                'zone' => $this->zone,
+                'zone' => $this->zone[1],
+                'state' => $this->zone[0],
+                'code' => $this->zone[3],
                 'timeline' => $result
             ];
         }

@@ -7,6 +7,7 @@ define('SOLAT_METHOD_POST', 'POST');
 define('SOLAT_METHOD_GET', 'GET');
 define('SOLAT_METHOD_PATCH', 'PATCH');
 define('SOLAT_METHOD_DELETE', 'DELETE');
+define('SOLAT_LANGUAGE_EN', 'en');
 
 if (! function_exists('esolat')) {
     function esolat()
@@ -46,6 +47,8 @@ if (! function_exists('solat_response')) {
             'data' => $result,
             'generated_at' => Carbon::now()->toDateTimeString(),
             'footer' => [
+                'source' => 'http://www.e-solat.gov.my/web/',
+                'host' => 'JAKIM',
                 'developer' => [
                     "name" => "Hafiq",
                     "homepage" => "https://github.com/afiqiqmal"

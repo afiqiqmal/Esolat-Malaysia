@@ -1,5 +1,6 @@
 # E-Solat
 
+A Packagist for Malaysia E-solat Time table. Fully Scraped from [Jakim](www.e-solat.gov.my)
 
 Tested in PHP 7.1 Only
 
@@ -27,17 +28,58 @@ require_once __DIR__ .'/../vendor/autoload.php';
 
 #### Sample
 ```php
-$data = 
+$data = esolat()
+        ->timeline()
+        ->zone('PNG01')
+        ->displayAs(3) // default is 2 (Week)
+        ->fetch();
 ```
 
-### Method
-<table>
-    <tr>
-        <th>Method</th>
-        <th>Param</th>
-        <th>Description</th>
-    </tr>
-</table>
+#### Sample for Day
+```php
+$response = esolat()
+        ->timeline()
+        ->zone('PNG01')
+        ->displayAs(1) // must be 1
+        ->setDate('2018-10-10') // if this is not set, it will automatically get current date
+        ->fetch();
+```
+
+#### Sample for Current Week
+```php
+$response = esolat()
+        ->timeline()
+        ->zone('PNG01')
+        ->displayAs(2) // must be 1
+        ->fetch();
+```
+
+#### Sample for Month
+```php
+$data = esolat()
+        ->timeline()
+        ->zone('PNG01')
+        ->displayAs(3)
+        ->month(4) // if this is set, displayAs() will automatically use as type '4'
+        ->year(2018)
+        ->fetch();
+```
+
+#### Sample for Year
+```php
+$data = esolat()
+        ->timeline()
+        ->zone('PNG01')
+        ->displayAs(4)
+        ->year(2018)
+        ->fetch();
+```
+
+#### Type of Display
+- (1) Day
+- (2) Week
+- (3) Month
+- (4) Year
 
 
 ### Result
@@ -49,7 +91,9 @@ You should getting data similarly like below:
     "data": {
         "month": "05",
         "year": 2018,
-        "zone": "PNG01",
+        "zone": "Seluruh Negeri Pulau Pinang",
+        "state": "Pulau Pinang",
+        "code": "P1",
         "timeline": [
             {
                 "date": "2018-05-29",
@@ -146,6 +190,8 @@ You should getting data similarly like below:
     },
     "generated_at": "2018-05-29 14:55:03",
     "footer": {
+        "source": "http://www.e-solat.gov.my/web/",
+        "host": "JAKIM",
         "developer": {
             "name": "Hafiq",
             "homepage": "https://github.com/afiqiqmal"
