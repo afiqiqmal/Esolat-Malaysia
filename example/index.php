@@ -36,7 +36,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 //    ->year(2018)
 //    ->fetch();
 
-$response = esolat()->location_list('negeri sembilan');
+//$response = esolat()->location_list('negeri sembilan');
 
 header('Content-type: application/json');
 echo json_encode($response, JSON_PRETTY_PRINT);
