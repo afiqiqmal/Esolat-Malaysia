@@ -18,8 +18,8 @@ class ESolat
         return new WaktuSolat();
     }
 
-    public function location_list()
+    public function location_list($state = null)
     {
-        return Location::listLocation();
+        return Location::listLocation($state);
     }
 }

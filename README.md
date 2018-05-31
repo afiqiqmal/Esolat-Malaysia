@@ -39,7 +39,7 @@ $data = esolat()
 ```php
 $response = esolat()
         ->timeline()
-        ->zone('PNG01')
+        ->zone('PNG01') // P1 or PNG01
         ->displayAs(1) // must be 1
         ->setDate('2018-10-10') // if this is not set, it will automatically get current date
         ->fetch();
@@ -49,7 +49,7 @@ $response = esolat()
 ```php
 $response = esolat()
         ->timeline()
-        ->zone('PNG01')
+        ->zone('PNG01') // P1 or PNG01
         ->displayAs(2) // must be 1
         ->fetch();
 ```
@@ -58,7 +58,7 @@ $response = esolat()
 ```php
 $data = esolat()
         ->timeline()
-        ->zone('PNG01')
+        ->zone('P1') // P1 or PNG01
         ->displayAs(3)
         ->month(4) // if this is set, displayAs() will automatically use as type '4'
         ->year(2018)
@@ -69,7 +69,7 @@ $data = esolat()
 ```php
 $data = esolat()
         ->timeline()
-        ->zone('PNG01')
+        ->zone('PNG01') // P1 or PNG01
         ->displayAs(4)
         ->year(2018)
         ->fetch();
@@ -81,6 +81,13 @@ $data = esolat()
 - (3) Month
 - (4) Year
 
+
+#### Get Location List By State
+```php
+$data = esolat()->location_list();
+//or
+$data = esolat()->location_list('negeri sembilan');
+```
 
 ### Result
 You should getting data similarly like below:
@@ -200,6 +207,67 @@ You should getting data similarly like below:
 }
 ```
 
+### Result for location list
+You should getting data similarly like below:
+```json
+{
+    "code": 200,
+    "error": false,
+    "data": [
+        {
+            "state": "Negeri Sembilan",
+            "zone": "Jempol",
+            "jakim_code": "NGS01",
+            "code": "N1"
+        },
+        {
+            "state": "Negeri Sembilan",
+            "zone": "Tampin",
+            "jakim_code": "NGS01",
+            "code": "N2"
+        },
+        {
+            "state": "Negeri Sembilan",
+            "zone": "Port Dickson",
+            "jakim_code": "NGS02",
+            "code": "N3"
+        },
+        {
+            "state": "Negeri Sembilan",
+            "zone": "Seremban",
+            "jakim_code": "NGS02",
+            "code": "N4"
+        },
+        {
+            "state": "Negeri Sembilan",
+            "zone": "Kuala Pilah",
+            "jakim_code": "NGS02",
+            "code": "N5"
+        },
+        {
+            "state": "Negeri Sembilan",
+            "zone": "Jelebu",
+            "jakim_code": "NGS02",
+            "code": "N6"
+        },
+        {
+            "state": "Negeri Sembilan",
+            "zone": "Rembau",
+            "jakim_code": "NGS02",
+            "code": "N7"
+        }
+    ],
+    "generated_at": "2018-05-31 15:35:15",
+    "footer": {
+        "source": "http://www.e-solat.gov.my/web/",
+        "host": "JAKIM",
+        "developer": {
+            "name": "Hafiq",
+            "homepage": "https://github.com/afiqiqmal"
+        }
+    }
+}
+```
 
 ## Issue
 - If Issue happen like the api always return empty [] after cross check with real site, just let me know =)

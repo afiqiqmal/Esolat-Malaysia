@@ -32,7 +32,7 @@ class Location
         $data = [];
         foreach ($locations as $location) {
             if ($state) {
-                if ($state == strtolower($location[0])) {
+                if (strtolower($state) == strtolower($location[0])) {
                     $data[] = [
                         'state' => $location[0],
                         'zone' => $location[1],
@@ -41,7 +41,12 @@ class Location
                     ];
                 }
             } else {
-
+                $data[] = [
+                    'state' => $location[0],
+                    'zone' => $location[1],
+                    'jakim_code' => $location[2],
+                    'code' => $location[3],
+                ];
             }
         }
 
