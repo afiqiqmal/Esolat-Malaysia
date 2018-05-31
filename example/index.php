@@ -8,12 +8,12 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-//$response = esolat()
-//    ->timeline()
-//    ->zone('PNG01')
-//    ->displayAs(1) // must be 1
-//    ->setDate('2018-10-10') // if this is not set, it will automatically get current date
-//    ->fetch();
+$response = esolat()
+    ->timeline()
+    ->zone('PNG01')
+    ->displayAs(1) // must be 1
+    ->setDate('2018-10-10') // if this is not set, it will automatically get current date
+    ->fetch();
 //
 //$response = esolat()
 //    ->timeline()

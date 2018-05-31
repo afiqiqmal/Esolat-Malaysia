@@ -1,7 +1,7 @@
 {
     "name": "afiqiqmal/esolat",
-    "description": "Api Parcel Tracking API",
-    "keywords": ["php", "parcel"],
+    "description": "E-Waktu Solat in Malaysia",
+    "keywords": ["php", "prayer", "malaysia", "waktu-solat", "jakim"],
     "license": "MIT",
     "type": "project",
     "authors": [
