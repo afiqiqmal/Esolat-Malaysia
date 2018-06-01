@@ -1,4 +1,4 @@
-# E-Solat
+# E-Solat Malaysia
 
 A Packagist for Malaysia E-solat Time table. Fully Scraped from [Jakim](www.e-solat.gov.my)
 
@@ -274,6 +274,9 @@ You should getting data similarly like below:
 
 ## ChangeLog
 - See changelog.md
+
+## Credit
+- Jakim
 
 ## License
 Licensed under the [MIT license](http://opensource.org/licenses/MIT)
