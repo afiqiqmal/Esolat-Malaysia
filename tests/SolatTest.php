@@ -94,4 +94,30 @@ class SolatTest extends TestCase
         $this->assertFalse($response['error']);
         $this->assertTrue(count($response['data']) == 12);
     }
+
+    public function testDisplayAsFailed()
+    {
+        $response = esolat()
+            ->timeline()
+            ->zone('PNG01')
+            ->displayAs(5)
+            ->fetch();
+        $this->assertTrue($response['error']);
+    }
+
+    public function testZoneFailed()
+    {
+        $response = esolat()
+            ->timeline()
+            ->zone('PNG02')
+            ->displayAs(4)
+            ->fetch();
+        $this->assertTrue($response['error']);
+
+        $response = esolat()
+            ->timeline()
+            ->displayAs(4)
+            ->fetch();
+        $this->assertTrue($response['error']);
+    }
 }
