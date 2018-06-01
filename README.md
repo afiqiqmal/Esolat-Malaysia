@@ -8,7 +8,7 @@ Tested in PHP 7.1 Only
 
 #### Step 1: Install from composer
 ```
-composer require afiqiqmal/esolat
+composer require afiqiqmal/esolat-malaysia
 ```
 Alternatively, you can specify as a dependency in your project's existing composer.json file
 ```
