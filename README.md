@@ -14,7 +14,7 @@ Alternatively, you can specify as a dependency in your project's existing compos
 ```
 {
    "require": {
-      "afiqiqmal/esolat": "^1.0"
+      "afiqiqmal/esolat-malaysia": "^1.0"
    }
 }
 ```

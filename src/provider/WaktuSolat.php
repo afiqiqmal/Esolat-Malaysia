@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Created by PhpStorm.
+ * User: hafiq
+ * Date: 29/05/2018
+ * Time: 6:22 PM
+ */
+
 namespace Afiqiqmal\ESolat\Provider;
 
 use afiqiqmal\ESolat\Sources\Location;
@@ -7,13 +14,6 @@ use afiqiqmal\Library\Constant;
 use afiqiqmal\Library\SolatUtils;
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
-
-/**
- * Created by PhpStorm.
- * User: hafiq
- * Date: 29/05/2018
- * Time: 6:22 PM
- */
 
 class WaktuSolat
 {
@@ -87,10 +87,10 @@ class WaktuSolat
         if (!$this->month) {
             $this->month = date('m');
         } else {
-             if ($this->month != date('m')) {
-                 $this->type = Constant::YEAR_VAL;
-                 $this->type_name = SolatUtils::filterType($this->type);
-             }
+            if ($this->month != date('m')) {
+                $this->type = Constant::YEAR_VAL;
+                $this->type_name = SolatUtils::filterType($this->type);
+            }
         }
 
         if (!$this->type_name) {
@@ -132,13 +132,15 @@ class WaktuSolat
             return $request
                 ->baseUrl($this->url)
                 ->getMethod()
-                ->setRequestBody([
+                ->setRequestBody(
+                    [
                     'year' => $this->year,
                     'bulan' => $this->month,
                     'lang' => $this->language,
                     'zone' => $this->zone[2],
                     'jenis' => $this->type_name
-                ])
+                    ]
+                )
                 ->getRaw()
                 ->fetch();
         } catch (\Exception $e) {
@@ -150,29 +152,35 @@ class WaktuSolat
     {
         if (!preg_match('/(No Record)/', $result['body'])) {
             $crawler = new Crawler($result['body']);
-            $result = $crawler->filter('table:nth-child(2) tr:not(:first-child)')->each(function (Crawler $node, $x) {
-                $item = $node->filter('td')->each(function (Crawler $node, $x) {
-                    return trim_spaces($node->text());
-                });
+            $result = $crawler->filter('table:nth-child(2) tr:not(:first-child)')->each(
+                function (Crawler $node, $x) {
+                    $item = $node->filter('td')->each(
+                        function (Crawler $node, $x) {
+                            return trim_spaces($node->text());
+                        }
+                    );
 
-                $date = null;
-                $timeline = [];
-                foreach ($item as $key => $row) {
-                    if ($key == 0) {
-                        $date = SolatUtils::monthCorrection($row);
+                    $date = null;
+                    $timeline = [];
+                    foreach ($item as $key => $row) {
+                        if ($key == 0) {
+                            $date = SolatUtils::monthCorrection($row);
+                        }
+
+                        if ($key > 1) {
+                            $timeline[Constant::WAKTU_SOLAT[$key-2]] =
+                                Carbon::createFromFormat('d M Y H:i', "$date {$this->year} $row")
+                                    ->timestamp;
+                        }
                     }
 
-                    if ($key > 1) {
-                        $timeline[Constant::WAKTU_SOLAT[$key-2]] = Carbon::createFromFormat('d M Y H:i', "$date {$this->year} $row")->timestamp;
-                    }
+                    $date = Carbon::createFromFormat('d M Y', "$date {$this->year}");
+                    $data['date'] = $date->toDateString();
+                    $data['day'] = $date->format('l');
+                    $data['waktu'] = $timeline;
+                    return $data;
                 }
-
-                $date = Carbon::createFromFormat('d M Y', "$date {$this->year}");
-                $data['date'] = $date->toDateString();
-                $data['day'] = $date->format('l');
-                $data['waktu'] = $timeline;
-                return $data;
-            });
+            );
 
             if ($this->type == Constant::DAY_VAL) {
                 $result = SolatUtils::searchByDate($result, $this->chosen_date);
