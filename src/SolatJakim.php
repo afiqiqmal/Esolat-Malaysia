@@ -1,21 +1,14 @@
 <?php
 
-namespace afiqiqmal\ESolat;
+namespace afiqiqmal\SolatJakim;
 
-/**
- * Created by PhpStorm.
- * User: hafiq
- * Date: 29/05/2018
- * Time: 6:10 PM
- */
-
-use afiqiqmal\ESolat\Provider\WaktuSolat;
-use afiqiqmal\ESolat\Sources\Location;
+use afiqiqmal\SolatJakim\Provider\WaktuSolat;
+use afiqiqmal\SolatJakim\Sources\Location;
 use afiqiqmal\Library\IslamicCarbon;
 use afiqiqmal\Library\IslamicDateConverter;
 use Carbon\Carbon;
 
-class ESolat
+class SolatJakim
 {
     public function timeline()
     {

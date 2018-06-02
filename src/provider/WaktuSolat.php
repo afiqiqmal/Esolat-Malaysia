@@ -1,15 +1,8 @@
 <?php
 
-namespace afiqiqmal\ESolat\Provider;
+namespace afiqiqmal\SolatJakim\Provider;
 
-/**
- * Created by PhpStorm.
- * User: hafiq
- * Date: 29/05/2018
- * Time: 6:22 PM
- */
-
-use afiqiqmal\ESolat\Sources\Location;
+use afiqiqmal\SolatJakim\Sources\Location;
 use afiqiqmal\Library\Constant;
 use afiqiqmal\Library\IslamicDateConverter;
 use afiqiqmal\Library\SolatUtils;

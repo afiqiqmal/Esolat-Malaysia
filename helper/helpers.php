@@ -1,6 +1,6 @@
 <?php
 
-use afiqiqmal\ESolat\ESolat;
+use afiqiqmal\SolatJakim\SolatJakim;
 use Carbon\Carbon;
 
 define('SOLAT_METHOD_POST', 'POST');
@@ -12,7 +12,7 @@ define('SOLAT_LANGUAGE_EN', 'en');
 if (! function_exists('esolat')) {
     function esolat()
     {
-        return new ESolat();
+        return new SolatJakim();
     }
 }
 

@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hafiq
- * Date: 29/05/2018
- * Time: 9:15 PM
- */
 
 namespace afiqiqmal\Library;
-
 
 class Constant
 {

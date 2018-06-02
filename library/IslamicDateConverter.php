@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hafiq
- * Date: 02/06/2018
- * Time: 5:56 PM
- */
 
 namespace afiqiqmal\Library;
 

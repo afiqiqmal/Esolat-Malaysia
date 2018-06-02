@@ -1,13 +1,6 @@
 <?php
 
-namespace afiqiqmal\ESolat\Sources;
-
-/**
- * Created by PhpStorm.
- * User: hafiq
- * Date: 30/05/2018
- * Time: 2:54 PM
- */
+namespace afiqiqmal\SolatJakim\Sources;
 
 class Location
 {
