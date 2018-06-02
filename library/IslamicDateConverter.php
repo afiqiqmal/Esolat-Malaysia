@@ -6,7 +6,7 @@
  * Time: 5:56 PM
  */
 
-namespace Afiqiqmal\Library;
+namespace afiqiqmal\Library;
 
 use Carbon\Carbon;
 

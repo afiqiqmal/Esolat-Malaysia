@@ -1,6 +1,6 @@
 <?php
 
-namespace Afiqiqmal\ESolat\Sources;
+namespace afiqiqmal\ESolat\Sources;
 
 /**
  * Created by PhpStorm.

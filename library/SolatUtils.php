@@ -6,7 +6,7 @@
  * Time: 9:15 PM
  */
 
-namespace Afiqiqmal\Library;
+namespace afiqiqmal\Library;
 
 class SolatUtils
 {

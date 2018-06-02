@@ -1,5 +1,5 @@
 <?php
-namespace Afiqiqmal\Library;
+namespace afiqiqmal\Library;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;

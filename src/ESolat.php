@@ -6,12 +6,12 @@
  * Time: 6:10 PM
  */
 
-namespace Afiqiqmal\ESolat;
+namespace afiqiqmal\ESolat;
 
-use Afiqiqmal\ESolat\Provider\WaktuSolat;
-use Afiqiqmal\ESolat\Sources\Location;
-use Afiqiqmal\Library\IslamicCarbon;
-use Afiqiqmal\Library\IslamicDateConverter;
+use afiqiqmal\ESolat\Provider\WaktuSolat;
+use afiqiqmal\ESolat\Sources\Location;
+use afiqiqmal\Library\IslamicCarbon;
+use afiqiqmal\Library\IslamicDateConverter;
 use Carbon\Carbon;
 
 class ESolat
