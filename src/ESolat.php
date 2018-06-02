@@ -1,12 +1,13 @@
 <?php
+
+namespace afiqiqmal\ESolat;
+
 /**
  * Created by PhpStorm.
  * User: hafiq
  * Date: 29/05/2018
  * Time: 6:10 PM
  */
-
-namespace afiqiqmal\ESolat;
 
 use afiqiqmal\ESolat\Provider\WaktuSolat;
 use afiqiqmal\ESolat\Sources\Location;

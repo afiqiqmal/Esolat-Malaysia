@@ -118,27 +118,27 @@ class ApiRequest
         try {
             $client = new Client();
             switch ($this->method) {
-                case SOLAT_METHOD_GET:
-                    $param = [
-                        'query' => $this->requestBody,
-                        'headers' => $this->header
-                    ];
-                    break;
-                case SOLAT_METHOD_POST:
-                    $param = [
-                        'form_params' => $this->requestBody,
-                        'headers' => $this->header
-                    ];
-                    break;
-                case SOLAT_METHOD_PATCH:
-                    $param = [];
-                    break;
-                case SOLAT_METHOD_DELETE:
-                    $param = [];
-                    break;
-                default:
-                    $param = null;
-                    break;
+            case SOLAT_METHOD_GET:
+                $param = [
+                    'query' => $this->requestBody,
+                    'headers' => $this->header
+                ];
+                break;
+            case SOLAT_METHOD_POST:
+                $param = [
+                    'form_params' => $this->requestBody,
+                    'headers' => $this->header
+                ];
+                break;
+            case SOLAT_METHOD_PATCH:
+                $param = [];
+                break;
+            case SOLAT_METHOD_DELETE:
+                $param = [];
+                break;
+            default:
+                $param = null;
+                break;
             }
 
             if (!$this->header) {

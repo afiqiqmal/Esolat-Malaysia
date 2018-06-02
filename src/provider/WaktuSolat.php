@@ -1,13 +1,13 @@
 <?php
 
+namespace afiqiqmal\ESolat\Provider;
+
 /**
  * Created by PhpStorm.
  * User: hafiq
  * Date: 29/05/2018
  * Time: 6:22 PM
  */
-
-namespace afiqiqmal\ESolat\Provider;
 
 use afiqiqmal\ESolat\Sources\Location;
 use afiqiqmal\Library\Constant;

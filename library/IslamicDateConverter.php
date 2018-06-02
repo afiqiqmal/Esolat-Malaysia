@@ -15,15 +15,14 @@ class IslamicDateConverter
     /**
      * Convert Gregorian date to Hijri date
      *
-     * @param          $date
+     * @param $date
      * @param int|null $adjustment
      *
      * @return IslamicCarbon
      */
     public static function convertToHijri($date, int $adjustment = -2)
     {
-        if (!$date instanceof Carbon)
-        {
+        if (!$date instanceof Carbon) {
             $date = new Carbon($date);
         }
         return static::toHijri($date, $adjustment);
@@ -45,8 +44,9 @@ class IslamicDateConverter
 
     /**
      * Convert Gregorian date to Hijri date
-     * @param Carbon $date
-     * @param int $adjustment
+     *
+     * @param  Carbon $date
+     * @param  int    $adjustment
      * @return IslamicCarbon
      */
     private static function toHijri(Carbon $date, int $adjustment): IslamicCarbon
@@ -85,8 +85,7 @@ class IslamicDateConverter
      */
     private static function gregorianToJulian(int $year, int $month, int $day)
     {
-        if ($month < 3)
-        {
+        if ($month < 3) {
             $year -= 1;
             $month += 12;
         }
@@ -120,8 +119,7 @@ class IslamicDateConverter
     private static function julianToGregorian(float $julianDay)
     {
         $b = 0;
-        if ($julianDay > 2299160)
-        {
+        if ($julianDay > 2299160) {
             $a = floor(($julianDay - 1867216.25) / 36524.25);
             $b = 1 + $a - floor($a / 4.0);
         }
@@ -131,8 +129,7 @@ class IslamicDateConverter
         $ee = floor(($bb - $dd) / 30.6001);
         $day = ($bb - $dd) - floor(30.6001 * $ee);
         $month = $ee - 1;
-        if ($ee > 13)
-        {
+        if ($ee > 13) {
             $cc += 1;
             $month = $ee - 13;
         }
@@ -158,8 +155,7 @@ class IslamicDateConverter
         $z = $z - floor($j * $y + $shift1);
         $year = 30 * $cyc + $j;
         $month = (int)floor(($z + 28.5001) / 29.5);
-        if ($month === 13)
-        {
+        if ($month === 13) {
             $month = 12;
         }
         $day = $z - floor(29.5001 * $month - 29);

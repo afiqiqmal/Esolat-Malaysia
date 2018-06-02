@@ -13,16 +13,16 @@ class SolatUtils
     public static function filterType($type)
     {
         switch ($type) {
-            case 1:
-                return Constant::YEAR;
-            case 2:
-                return Constant::WEEK;
-            case 3:
-                return Constant::MONTH;
-            case 4:
-                return Constant::YEAR;
-            default:
-                return null;
+        case 1:
+            return Constant::YEAR;
+        case 2:
+            return Constant::WEEK;
+        case 3:
+            return Constant::MONTH;
+        case 4:
+            return Constant::YEAR;
+        default:
+            return null;
         }
     }
 
