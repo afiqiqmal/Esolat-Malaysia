@@ -1,11 +1,11 @@
 <?php
 
-namespace afiqiqmal\SolatJakim;
+namespace Afiqiqmal\SolatJakim;
 
-use afiqiqmal\SolatJakim\Provider\WaktuSolat;
-use afiqiqmal\SolatJakim\Sources\Location;
-use afiqiqmal\Library\IslamicCarbon;
-use afiqiqmal\Library\IslamicDateConverter;
+use Afiqiqmal\SolatJakim\Provider\WaktuSolat;
+use Afiqiqmal\SolatJakim\Sources\Location;
+use Afiqiqmal\Library\IslamicCarbon;
+use Afiqiqmal\Library\IslamicDateConverter;
 use Carbon\Carbon;
 
 class SolatJakim

@@ -23,9 +23,9 @@
     },
     "autoload": {
         "psr-4": {
-            "afiqiqmal\\SolatJakim\\": "src/",
-            "afiqiqmal\\Library\\": "Library/"
+            "Afiqiqmal\\SolatJakim\\": "src/",
+            "Afiqiqmal\\Library\\": "Library/"
         },
-        "files": ["helper/Helpers.php"]
+        "files": ["Helper/Helpers.php"]
     }
 }

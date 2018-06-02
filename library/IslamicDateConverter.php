@@ -1,6 +1,6 @@
 <?php
 
-namespace afiqiqmal\Library;
+namespace Afiqiqmal\Library;
 
 use Carbon\Carbon;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace afiqiqmal\SolatJakim\Sources;
+namespace Afiqiqmal\SolatJakim\Sources;
 
 class Location
 {

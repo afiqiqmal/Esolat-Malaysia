@@ -1,6 +1,6 @@
 <?php
 
-use afiqiqmal\SolatJakim\SolatJakim;
+use Afiqiqmal\SolatJakim\SolatJakim;
 use Carbon\Carbon;
 
 define('SOLAT_METHOD_POST', 'POST');
@@ -51,7 +51,7 @@ if (! function_exists('solat_response')) {
                 'host' => 'JAKIM',
                 'developer' => [
                     "name" => "Hafiq",
-                    "homepage" => "https://github.com/afiqiqmal"
+                    "homepage" => "https://github.com/Afiqiqmal"
                 ]
             ]
         ];

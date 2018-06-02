@@ -1,6 +1,6 @@
 <?php
 
-namespace afiqiqmal\Library;
+namespace Afiqiqmal\Library;
 
 use Carbon\Carbon;
 
@@ -11,7 +11,7 @@ class IslamicCarbon extends Carbon
     public function __construct(string $time = null, $tz = null)
     {
         parent::__construct($time, $tz);
-        $this->islamic_month = $this->get_month_name($this->month);
+        $this->islamic_month = $this->getMonthName($this->month);
     }
 
     public function toDateIslamicString()
@@ -19,7 +19,7 @@ class IslamicCarbon extends Carbon
         return $this->day.'-'.$this->islamic_month.'-'.$this->year;
     }
 
-    private function get_month_name($i)
+    private function getMonthName($i)
     {
         $month  = [
             "Muharram",
