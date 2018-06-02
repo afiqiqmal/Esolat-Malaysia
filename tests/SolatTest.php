@@ -32,7 +32,7 @@ class SolatTest extends TestCase
             ->displayAs(1)
             ->setDate('2018-10-10')
             ->fetch();
-        
+
         $this->assertFalse($response['error']);
         $this->assertTrue($response['data']['month'] == '10');
         $this->assertTrue($response['data']['year'] == '2018');

@@ -1,6 +1,6 @@
 <?php
 
-use afiqiqmal\ESolat\esolat;
+use afiqiqmal\ESolat\ESolat;
 use Carbon\Carbon;
 
 define('SOLAT_METHOD_POST', 'POST');
