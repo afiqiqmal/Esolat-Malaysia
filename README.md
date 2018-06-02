@@ -50,7 +50,7 @@ $response = esolat()
 $response = esolat()
         ->timeline()
         ->zone('PNG01') // P1 or PNG01
-        ->displayAs(2) // must be 1
+        ->displayAs(2)
         ->fetch();
 ```
 
