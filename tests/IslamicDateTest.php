@@ -3,8 +3,6 @@ namespace Tests;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use afiqiqmal\Library\Constant;
-use afiqiqmal\Library\SolatUtils;
 use PHPUnit\Framework\TestCase;
 /**
 * RequestTest.php

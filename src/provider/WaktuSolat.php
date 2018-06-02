@@ -9,10 +9,10 @@
 
 namespace Afiqiqmal\ESolat\Provider;
 
-use afiqiqmal\ESolat\Sources\Location;
-use afiqiqmal\Library\Constant;
-use afiqiqmal\Library\IslamicDateConverter;
-use afiqiqmal\Library\SolatUtils;
+use Afiqiqmal\ESolat\Sources\Location;
+use Afiqiqmal\Library\Constant;
+use Afiqiqmal\Library\IslamicDateConverter;
+use Afiqiqmal\Library\SolatUtils;
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -129,7 +129,7 @@ class WaktuSolat
     private function callJakim()
     {
         try {
-            $request = new \afiqiqmal\Library\ApiRequest();
+            $request = new \Afiqiqmal\Library\ApiRequest();
             return $request
                 ->baseUrl($this->url)
                 ->getMethod()
