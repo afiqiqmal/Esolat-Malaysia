@@ -1,6 +1,6 @@
 # E-Solat Malaysia
-[![Build Status](https://travis-ci.org/afiqiqmal/esolat-malaysia.svg?branch=master)](https://travis-ci.org/afiqiqmal/esolat-malaysia)
-[![Coverage](https://img.shields.io/codecov/c/github/afiqiqmal/esolat-malaysia.svg)](https://codecov.io/gh/afiqiqmal/esolat-malaysia)
+[![Build Status](https://travis-ci.org/afiqiqmal/Esolat-Malaysia.svg?branch=master)](https://travis-ci.org/afiqiqmal/Esolat-Malaysia)
+[![Coverage](https://img.shields.io/codecov/c/github/afiqiqmal/Esolat-Malaysia.svg)](https://codecov.io/gh/afiqiqmal/Esolat-Malaysia)
 
 A Packagist for Malaysia E-solat Time table. Fully Scraped from [Jakim](www.e-solat.gov.my)
 
