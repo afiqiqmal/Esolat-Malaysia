@@ -24,7 +24,7 @@
     "autoload": {
         "psr-4": {
             "afiqiqmal\\ESolat\\": "src/",
-            "afiqiqmal\\Library\\": "library/"
+            "afiqiqmal\\Library\\": "Library/"
         },
         "files": ["helper/helpers.php"]
     }
