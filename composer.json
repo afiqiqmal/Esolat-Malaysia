@@ -26,6 +26,6 @@
             "Afiqiqmal\\SolatJakim\\": "src/",
             "Afiqiqmal\\Library\\": "Library/"
         },
-        "files": ["Helper/Helpers.php"]
+        "files": ["helper/helpers.php"]
     }
 }
