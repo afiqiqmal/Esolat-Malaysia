@@ -89,6 +89,24 @@ $data = esolat()->location_list();
 $data = esolat()->location_list('negeri sembilan');
 ```
 
+
+### Extra Usage
+* `$adjustment` - By default is -2 to fit with Malaysia Zone Date
+##### Convert Date to Hijri Date
+```php
+$date = esolat()->date_to_hijri(\Carbon\Carbon::now(), $adjustment); // Return IslamicCarbon
+$date->toDateIslamicString(); // 17-Ramadhan-1439
+$date->month; // 9
+$date->year; // 1439
+$date->day; // 17
+$date->islamic_month; // Ramadhan
+```
+
+##### Convert Hijri Date to Date
+```php
+$date = esolat()->hijri_to_date(17, 9, 1439, $adjustment); // Return Carbon
+```
+
 ### Result
 You should getting data similarly like below:
 ```json
@@ -96,66 +114,15 @@ You should getting data similarly like below:
     "code": 200,
     "error": false,
     "data": {
-        "month": "05",
-        "year": 2018,
+        "month": "06",
+        "year": "2018",
         "zone": "Seluruh Negeri Pulau Pinang",
         "state": "Pulau Pinang",
         "code": "P1",
         "timeline": [
             {
-                "date": "2018-05-29",
-                "day": "Tuesday",
-                "waktu": {
-                    "imsak": 1527571860,
-                    "subuh": 1527572460,
-                    "syuruk": 1527577320,
-                    "zohor": 1527599880,
-                    "asar": 1527612180,
-                    "maghrib": 1527622140,
-                    "isyak": 1527626700
-                }
-            },
-            {
-                "date": "2018-05-30",
-                "day": "Wednesday",
-                "waktu": {
-                    "imsak": 1527658260,
-                    "subuh": 1527658860,
-                    "syuruk": 1527663720,
-                    "zohor": 1527686280,
-                    "asar": 1527698580,
-                    "maghrib": 1527708600,
-                    "isyak": 1527713100
-                }
-            },
-            {
-                "date": "2018-05-31",
-                "day": "Thursday",
-                "waktu": {
-                    "imsak": 1527744660,
-                    "subuh": 1527745260,
-                    "syuruk": 1527750180,
-                    "zohor": 1527772680,
-                    "asar": 1527784980,
-                    "maghrib": 1527795000,
-                    "isyak": 1527799500
-                }
-            },
-            {
-                "date": "2018-06-01",
-                "day": "Friday",
-                "waktu": {
-                    "imsak": 1527831060,
-                    "subuh": 1527831660,
-                    "syuruk": 1527836580,
-                    "zohor": 1527859140,
-                    "asar": 1527871440,
-                    "maghrib": 1527881400,
-                    "isyak": 1527885900
-                }
-            },
-            {
                 "date": "2018-06-02",
+                "hijri_date": "17-Ramadhan-1439",
                 "day": "Saturday",
                 "waktu": {
                     "imsak": 1527917460,
@@ -169,6 +136,7 @@ You should getting data similarly like below:
             },
             {
                 "date": "2018-06-03",
+                "hijri_date": "18-Ramadhan-1439",
                 "day": "Sunday",
                 "waktu": {
                     "imsak": 1528003860,
@@ -182,6 +150,7 @@ You should getting data similarly like below:
             },
             {
                 "date": "2018-06-04",
+                "hijri_date": "19-Ramadhan-1439",
                 "day": "Monday",
                 "waktu": {
                     "imsak": 1528090260,
@@ -192,10 +161,66 @@ You should getting data similarly like below:
                     "maghrib": 1528140660,
                     "isyak": 1528145160
                 }
+            },
+            {
+                "date": "2018-06-05",
+                "hijri_date": "20-Ramadhan-1439",
+                "day": "Tuesday",
+                "waktu": {
+                    "imsak": 1528176660,
+                    "subuh": 1528177260,
+                    "syuruk": 1528182180,
+                    "zohor": 1528204740,
+                    "asar": 1528217100,
+                    "maghrib": 1528227060,
+                    "isyak": 1528231620
+                }
+            },
+            {
+                "date": "2018-06-06",
+                "hijri_date": "21-Ramadhan-1439",
+                "day": "Wednesday",
+                "waktu": {
+                    "imsak": 1528263060,
+                    "subuh": 1528263660,
+                    "syuruk": 1528268580,
+                    "zohor": 1528291140,
+                    "asar": 1528303500,
+                    "maghrib": 1528313460,
+                    "isyak": 1528318020
+                }
+            },
+            {
+                "date": "2018-06-07",
+                "hijri_date": "22-Ramadhan-1439",
+                "day": "Thursday",
+                "waktu": {
+                    "imsak": 1528349520,
+                    "subuh": 1528350120,
+                    "syuruk": 1528354980,
+                    "zohor": 1528377600,
+                    "asar": 1528389900,
+                    "maghrib": 1528399860,
+                    "isyak": 1528404420
+                }
+            },
+            {
+                "date": "2018-06-08",
+                "hijri_date": "23-Ramadhan-1439",
+                "day": "Friday",
+                "waktu": {
+                    "imsak": 1528435920,
+                    "subuh": 1528436520,
+                    "syuruk": 1528441380,
+                    "zohor": 1528464000,
+                    "asar": 1528476360,
+                    "maghrib": 1528486320,
+                    "isyak": 1528490880
+                }
             }
         ]
     },
-    "generated_at": "2018-05-29 14:55:03",
+    "generated_at": "2018-06-02 12:58:40",
     "footer": {
         "source": "http://www.e-solat.gov.my/web/",
         "host": "JAKIM",

@@ -11,6 +11,7 @@ namespace Afiqiqmal\ESolat\Provider;
 
 use afiqiqmal\ESolat\Sources\Location;
 use afiqiqmal\Library\Constant;
+use afiqiqmal\Library\IslamicDateConverter;
 use afiqiqmal\Library\SolatUtils;
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
@@ -176,6 +177,7 @@ class WaktuSolat
 
                     $date = Carbon::createFromFormat('d M Y', "$date {$this->year}");
                     $data['date'] = $date->toDateString();
+                    $data['hijri_date'] = IslamicDateConverter::convertToHijri($date)->toDateIslamicString();
                     $data['day'] = $date->format('l');
                     $data['waktu'] = $timeline;
                     return $data;
