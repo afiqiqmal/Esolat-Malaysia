@@ -1,6 +1,6 @@
 <?php
 
-namespace Afiqiqmal\Library;
+namespace Afiqiqmal\SolatJakim\Library;
 
 class Constant
 {
@@ -14,6 +14,9 @@ class Constant
     const MONTH_VAL = 3;
     const YEAR_VAL = 4;
 
-    const ALL_MONTH = [1,2,3,4,5,6,7,8,9,10,11,12];
+    const ALL_MONTH = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     const WAKTU_SOLAT = ['imsak', 'subuh', 'syuruk', 'zohor', 'asar', 'maghrib', 'isyak'];
+
+    const FILE_LOCATION = __DIR__ . '/../Sources/location.csv';
+    const FILE_LOCATION_EXTRA = __DIR__ . '/../Sources/location_extra.csv';
 }

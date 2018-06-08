@@ -16,16 +16,22 @@
         "guzzlehttp/guzzle": "^6.3",
         "symfony/dom-crawler": "^4.0",
         "symfony/css-selector": "^4.0",
-        "nesbot/carbon": "1.25.*"
+        "nesbot/carbon": "1.25.*",
+        "geocoder-php/google-maps-provider": "^4.2",
+        "php-http/guzzle6-adapter": "^1.1",
+        "php-http/message": "^1.6",
+        "geocoder-php/cache-provider": "^4.1"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.7"
     },
     "autoload": {
         "psr-4": {
-            "Afiqiqmal\\SolatJakim\\": "src/",
-            "Afiqiqmal\\Library\\": "Library/"
+            "Afiqiqmal\\SolatJakim\\": ""
         },
+        "exclude-from-classmap": [
+            "/tests/"
+        ],
         "files": ["helper/helpers.php"]
     }
 }

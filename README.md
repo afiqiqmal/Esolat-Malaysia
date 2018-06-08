@@ -30,10 +30,20 @@ After installing, you need to require Composer's autoloader and add your code.
 require_once __DIR__ .'/../vendor/autoload.php';
 ```
 
+Refer this for [Location Code](https://github.com/afiqiqmal/Esolat-Malaysia/blob/master/location_guide.md)
+
 #### Sample
 ```php
 $data = esolat()
         ->timeline()
+        ->zone('PNG01')
+        ->displayAs(3) // default is 2 (Week)
+        ->fetch();
+```
+
+or Replace with
+```php
+$data = (new WaktuSolat())
         ->zone('PNG01')
         ->displayAs(3) // default is 2 (Week)
         ->fetch();
@@ -79,6 +89,31 @@ $data = esolat()
         ->fetch();
 ```
 
+#### Want to search by Coordinate?
+- Just replace `zone()` with `locationProvider()`. For Example:
+```php
+$data = esolat()
+        ->timeline()
+        ->locationProvider(6.6626, 100.3217, GOOGLE API KEY)
+        ->displayAs(4)
+        ->year(2018)
+        ->fetch();
+```
+To get Only the Address Location
+```php
+$location = (new LocationProvider())
+            ->setGoogleMapKey($key)
+            ->setCoordinate($latitude, $longitude)
+            ->fetch(); // Return LocationData model
+            
+$location->getCode(); //R1            
+$location->getJakimCode(); //PLS01            
+$location->getState(); //Perlis            
+$location->getZone(); //Padang Besar            
+$location->toObject(); //return Object           
+$location->toArray(); //return Array           
+```
+
 #### Type of Display
 - (1) Day
 - (2) Week
@@ -88,11 +123,19 @@ $data = esolat()
 
 #### Get Location List By State
 ```php
-$data = esolat()->location_list();
+$data = esolat()->getLocations(); //return all
+$data = esolat()->getLocations('negeri sembilan');
 //or
-$data = esolat()->location_list('negeri sembilan');
+$data = Location::getLocations($state);
 ```
 
+#### Get Location By Code
+```php
+$data = esolat()->getLocationByCode('PLS01');
+$data = esolat()->getLocationByCode('R1');
+//or
+$data = Location::getLocationByCode($code);
+```
 
 ### Extra Usage
 * `$adjustment` - By default is -2 to fit with Malaysia Zone Date
@@ -112,7 +155,7 @@ $date = esolat()->hijri_to_date(17, 9, 1439, $adjustment); // Return Carbon
 ```
 
 ### Result
-You should getting data similarly like below:
+You should getting data similarly like SAMPLE below:
 ```json
 {
     "code": 200,
@@ -120,9 +163,14 @@ You should getting data similarly like below:
     "data": {
         "month": "06",
         "year": "2018",
-        "zone": "Seluruh Negeri Pulau Pinang",
-        "state": "Pulau Pinang",
-        "code": "P1",
+        "location": {
+            "state": "Perlis",
+            "zone": "Padang Besar",
+            "jakim_code": "PLS01",
+            "code": "R2",
+            "longitude": 100.3217,
+            "latitude": 6.6626
+        },
         "timeline": [
             {
                 "date": "2018-06-02",

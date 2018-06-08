@@ -1,6 +1,6 @@
 <?php
 
-use Afiqiqmal\SolatJakim\SolatJakim;
+use Afiqiqmal\SolatJakim\Main\SolatJakim;
 use Carbon\Carbon;
 
 define('SOLAT_METHOD_POST', 'POST');

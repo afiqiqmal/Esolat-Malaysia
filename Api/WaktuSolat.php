@@ -1,11 +1,14 @@
 <?php
 
-namespace Afiqiqmal\SolatJakim\Provider;
+namespace Afiqiqmal\SolatJakim\Api;
 
+use Afiqiqmal\SolatJakim\Library\ApiRequest;
+use Afiqiqmal\SolatJakim\Provider\LocationProvider;
 use Afiqiqmal\SolatJakim\Sources\Location;
-use Afiqiqmal\Library\Constant;
-use Afiqiqmal\Library\IslamicDateConverter;
-use Afiqiqmal\Library\SolatUtils;
+use Afiqiqmal\SolatJakim\Library\Constant;
+use Afiqiqmal\SolatJakim\Library\IslamicDateConverter;
+use Afiqiqmal\SolatJakim\Library\SolatUtils;
+use Afiqiqmal\SolatJakim\Sources\Model\LocationData;
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -19,7 +22,19 @@ class WaktuSolat
     private $type = null;
     private $type_name = null;
     private $chosen_date = null;
+    private $latitude = null;
+    private $longitude = null;
+    private $key = null;
+
     private $language = SOLAT_LANGUAGE_EN;
+
+    public function locationProvider($latitude, $longitude, $key = null)
+    {
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->key = $key;
+        return $this;
+    }
 
     public function year($year)
     {
@@ -60,39 +75,65 @@ class WaktuSolat
 
     public function fetch()
     {
+        //check for lat and lng if exist, then use location provider as zone
+        if ($this->latitude && $this->longitude) {
+            $location = (new LocationProvider())
+                ->setGoogleMapKey($this->key)
+                ->setCoordinate($this->latitude, $this->longitude)
+                ->fetch();
+
+            if (is_object($location)) {
+                $location->setLatitude($this->latitude);
+                $location->setLongitude($this->longitude);
+                $this->zone = $location;
+            } else {
+                $this->zone = null;
+            }
+        }
+
         if (!$this->zone) {
             return error_response('Zone Is Needed! Please refer to zone code');
         } else {
-            $this->zone = Location::getLocation($this->zone);
+            // if location provider is not used, then zone method is use to get zone address data
+            if (is_string($this->zone)) {
+                $this->zone = Location::getLocationByCode($this->zone);
+            }
+
             if (!$this->zone) {
                 return error_response('Zone is Invalid');
             }
         }
 
+        // set default type if not set, default type is WEEK
         if (!$this->type) {
             $this->type = Constant::WEEK_VAL;
             $this->type_name = SolatUtils::filterType($this->type);
         }
 
+        // set default year if not set
         if (!$this->year) {
             $this->year = date('Y');
         }
 
+        // set default month if not set
         if (!$this->month) {
             $this->month = date('m');
         } else {
+            // if set month is not the same of current month, we need to use YEAR type, because of jakim only show current month
             if ($this->month != date('m')) {
                 $this->type = Constant::YEAR_VAL;
                 $this->type_name = SolatUtils::filterType($this->type);
             }
         }
 
+        // check for type if not set
         if (!$this->type_name) {
             return error_response("Given type: {$this->type} is not the correct format filter. Please refer to doc");
         }
 
-        // filter check for using day
+        // filter check for using DAY type
         if ($this->type == Constant::DAY_VAL) {
+            // if DAY value is not set, then use the current date
             if ($this->chosen_date) {
                 $date = Carbon::parse($this->chosen_date);
             } else {
@@ -104,9 +145,10 @@ class WaktuSolat
             $this->year = $date->year;
         }
 
-        //filter check for using year
-        if ($this->type == 4 && $this->month == date('m')) {
+        // filter check for using YEAR type, and must be current month by default. If month is set, then it will act as month not year..
+        if ($this->type == Constant::YEAR_VAL && $this->month == date('m')) {
             $data = [];
+            // loop all 12 month
             foreach (Constant::ALL_MONTH as $month) {
                 $this->month = $month;
                 $result = $this->callJakim();
@@ -121,18 +163,21 @@ class WaktuSolat
 
     private function callJakim()
     {
+        /** @var LocationData $locationAddress */
+        $locationAddress = $this->zone;
+
         try {
-            $request = new \Afiqiqmal\Library\ApiRequest();
+            $request = new ApiRequest();
             return $request
                 ->baseUrl($this->url)
                 ->getMethod()
                 ->setRequestBody(
                     [
-                    'year' => $this->year,
-                    'bulan' => $this->month,
-                    'lang' => $this->language,
-                    'zone' => $this->zone[2],
-                    'jenis' => $this->type_name
+                        'year' => $this->year,
+                        'bulan' => $this->month,
+                        'lang' => $this->language,
+                        'zone' => $locationAddress->getJakimCode(),
+                        'jenis' => $this->type_name
                     ]
                 )
                 ->getRaw()
@@ -144,7 +189,7 @@ class WaktuSolat
 
     private function crawler($result)
     {
-        if (!preg_match('/(No Record)/', $result['body'])) {
+        if (isset($result['body']) && !preg_match('/(No Record)/', $result['body'])) {
             $crawler = new Crawler($result['body']);
             $result = $crawler->filter('table:nth-child(2) tr:not(:first-child)')->each(
                 function (Crawler $node, $x) {
@@ -162,8 +207,9 @@ class WaktuSolat
                         }
 
                         if ($key > 1) {
+                            $format = (preg_match('/[.]/', $row)) ? 'd M Y H.i' : 'd M Y H:i';
                             $timeline[Constant::WAKTU_SOLAT[$key-2]] =
-                                Carbon::createFromFormat('d M Y H:i', "$date {$this->year} $row")
+                                Carbon::createFromFormat($format, "$date {$this->year} $row")
                                     ->timestamp;
                         }
                     }
@@ -181,12 +227,13 @@ class WaktuSolat
                 $result = SolatUtils::searchByDate($result, $this->chosen_date);
             }
 
+            /** @var LocationData $locationAddress */
+            $locationAddress = $this->zone->toArray();
+
             return [
                 'month' => $this->month,
                 'year' => $this->year,
-                'zone' => $this->zone[1],
-                'state' => $this->zone[0],
-                'code' => $this->zone[3],
+                'location' => $locationAddress,
                 'timeline' => $result
             ];
         }

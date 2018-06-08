@@ -1,6 +1,6 @@
 <?php
 
-namespace Afiqiqmal\Library;
+namespace Afiqiqmal\SolatJakim\Library;
 
 class SolatUtils
 {
