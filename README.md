@@ -365,6 +365,7 @@ You should getting data similarly like below:
 
 ## Credit
 - Jakim
+- Location Extra - Malaysia Prayer Times (mpt)
 
 ## License
 Licensed under the [MIT license](http://opensource.org/licenses/MIT)
