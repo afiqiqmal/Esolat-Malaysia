@@ -2,58 +2,36 @@
 /**
  * Created by PhpStorm.
  * User: hafiq
- * Date: 07/06/2018
- * Time: 9:24 PM
+ * Date: 11/06/2018
+ * Time: 10:27 AM
  */
 
 namespace Afiqiqmal\SolatJakim\Sources\Model;
 
+
 class LocationData
 {
-    private $state;
-    private $zone;
-    private $jakim_code;
-    private $code;
     private $longitude;
     private $latitude;
+    private $name;
+    private $vicinity;
+    private $place_id;
 
     /**
      * LocationData constructor.
-     * @param $state
-     * @param $zone
-     * @param $jakim_code
-     * @param $code
+     * @param $longitude
+     * @param $latitude
+     * @param $name
+     * @param $vicinity
+     * @param $place_id
      */
-    public function __construct($state, $zone, $jakim_code, $code)
+    public function __construct($longitude, $latitude, $name, $vicinity, $place_id)
     {
-        $this->state = $state;
-        $this->zone = $zone;
-        $this->jakim_code = $jakim_code;
-        $this->code = $code;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getZone()
-    {
-        return $this->zone;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJakimCode()
-    {
-        return $this->jakim_code;
+        $this->longitude = $longitude;
+        $this->latitude = $latitude;
+        $this->name = $name;
+        $this->vicinity = $vicinity;
+        $this->place_id = $place_id;
     }
 
     /**
@@ -65,14 +43,6 @@ class LocationData
     }
 
     /**
-     * @param mixed $longitude
-     */
-    public function setLongitude($longitude)
-    {
-        $this->longitude = $longitude;
-    }
-
-    /**
      * @return mixed
      */
     public function getLatitude()
@@ -81,29 +51,35 @@ class LocationData
     }
 
     /**
-     * @param mixed $latitude
+     * @return mixed
      */
-    public function setLatitude($latitude)
+    public function getName()
     {
-        $this->latitude = $latitude;
+        return $this->name;
     }
-
 
     /**
      * @return mixed
      */
-    public function getCode()
+    public function getVicinity()
     {
-        return $this->code;
+        return $this->vicinity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlaceId()
+    {
+        return $this->place_id;
     }
 
     public function toArray()
     {
         return [
-            'state' => $this->state,
-            'zone' => $this->zone,
-            'jakim_code' => $this->jakim_code,
-            'code' => $this->code,
+            'name' => $this->name,
+            'place_id' => $this->place_id,
+            'vicinity' => $this->vicinity,
             'longitude' => $this->longitude,
             'latitude' => $this->latitude
         ];
@@ -112,10 +88,9 @@ class LocationData
     public function toObject()
     {
         return (object)[
-            'state' => $this->state,
-            'zone' => $this->zone,
-            'jakim_code' => $this->jakim_code,
-            'code' => $this->code,
+            'name' => $this->name,
+            'place_id' => $this->place_id,
+            'vicinity' => $this->vicinity,
             'longitude' => $this->longitude,
             'latitude' => $this->latitude
         ];

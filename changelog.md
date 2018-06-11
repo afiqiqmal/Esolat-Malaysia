@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.1 Add List Nearby Mosque
+- Add List nearby mosque
+- Fix model name
+
 ## 2.0 Revamp Structure
 - Add Solat Timeline By Coordinate
 - Fix namespaces

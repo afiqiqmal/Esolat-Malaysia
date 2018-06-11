@@ -8,7 +8,7 @@ use Afiqiqmal\SolatJakim\Sources\Location;
 use Afiqiqmal\SolatJakim\Library\Constant;
 use Afiqiqmal\SolatJakim\Library\IslamicDateConverter;
 use Afiqiqmal\SolatJakim\Library\SolatUtils;
-use Afiqiqmal\SolatJakim\Sources\Model\LocationData;
+use Afiqiqmal\SolatJakim\Sources\Model\ZoneData;
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -163,7 +163,7 @@ class WaktuSolat
 
     private function callJakim()
     {
-        /** @var LocationData $locationAddress */
+        /** @var ZoneData $locationAddress */
         $locationAddress = $this->zone;
 
         try {
@@ -227,7 +227,7 @@ class WaktuSolat
                 $result = SolatUtils::searchByDate($result, $this->chosen_date);
             }
 
-            /** @var LocationData $locationAddress */
+            /** @var ZoneData $locationAddress */
             $locationAddress = $this->zone->toArray();
 
             return [

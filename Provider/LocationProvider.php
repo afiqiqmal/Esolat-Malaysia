@@ -9,7 +9,7 @@
 namespace Afiqiqmal\SolatJakim\Provider;
 
 use Afiqiqmal\SolatJakim\Sources\Location;
-use Afiqiqmal\SolatJakim\Sources\Model\LocationData;
+use Afiqiqmal\SolatJakim\Sources\Model\ZoneData;
 use Geocoder\Exception\Exception;
 use Geocoder\Geocoder;
 use Geocoder\Model\AdminLevel;
@@ -23,7 +23,7 @@ class LocationProvider
      */
     private $geocoder;
 
-    /** @var LocationData[] */
+    /** @var ZoneData[] */
     protected $provider_location;
 
     protected $key = null;
@@ -105,7 +105,7 @@ class LocationProvider
 
     /**
      * @param $place
-     * @return LocationData|null
+     * @return ZoneData|null
      */
     private function getProviderLocation($place)
     {

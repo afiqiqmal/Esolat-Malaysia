@@ -104,7 +104,7 @@ To get Only the Address Location
 $location = (new LocationProvider())
             ->setGoogleMapKey($key)
             ->setCoordinate($latitude, $longitude)
-            ->fetch(); // Return LocationData model
+            ->fetch(); // Return ZoneData model
             
 $location->getCode(); //R1            
 $location->getJakimCode(); //PLS01            
@@ -138,7 +138,7 @@ $data = Location::getLocationByCode($code);
 ```
 
 ### Extra Usage
-* `$adjustment` - By default is -2 to fit with Malaysia Zone Date
+* `$adjustment` - By default is -2 day to fit with Malaysia Zone Date
 ##### Convert Date to Hijri Date
 ```php
 $date = esolat()->date_to_hijri(\Carbon\Carbon::now(), $adjustment); // Return IslamicCarbon
@@ -152,6 +152,14 @@ $date->islamic_month; // Ramadhan
 ##### Convert Hijri Date to Date
 ```php
 $date = esolat()->hijri_to_date(17, 9, 1439, $adjustment); // Return Carbon
+```
+
+#### Get List of Nearby Mosque
+```php
+$data = esolat()->getNearbyMosque(2.9474,101.8451, "GOOGLE API", "RADIUS ex: 10000");
+// or
+$data = (new NearbyProvider("AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ"))
+    ->getNearbyLocation('mosque', 2.9474,101.8451);
 ```
 
 ### Result

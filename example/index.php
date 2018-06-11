@@ -54,15 +54,17 @@ require_once __DIR__ . '/../vendor/autoload.php';
 //} catch (\Geocoder\Exception\Exception $e) {
 //    echo $e->getMessage();
 //}
-
-$data = esolat()
-    ->timeline()
-    ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-    ->displayAs(2) // default is 2 (Week)
-    ->fetch();
+//
+//$data = esolat()
+//    ->timeline()
+//    ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+//    ->displayAs(2) // default is 2 (Week)
+//    ->fetch();
 
 //$data =  \Afiqiqmal\SolatJakim\Sources\Location::getRawData();
 
+$data = (new \Afiqiqmal\SolatJakim\Provider\NearbyProvider("AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ"))
+    ->getNearbyLocation('mosque', 2.9474,101.8451);
 
 header('Content-type: application/json');
 echo json_encode($data, JSON_PRETTY_PRINT);

@@ -4,6 +4,7 @@ namespace Afiqiqmal\SolatJakim\Main;
 
 use Afiqiqmal\SolatJakim\Api\WaktuSolat;
 use Afiqiqmal\SolatJakim\Provider\LocationProvider;
+use Afiqiqmal\SolatJakim\Provider\NearbyProvider;
 use Afiqiqmal\SolatJakim\Sources\Location;
 use Afiqiqmal\SolatJakim\Library\IslamicCarbon;
 use Afiqiqmal\SolatJakim\Library\IslamicDateConverter;
@@ -14,6 +15,12 @@ class SolatJakim
     public function timeline()
     {
         return new WaktuSolat();
+    }
+
+    public function getNearbyMosque($latitude, $longitude, $key = null, $radius = 10000)
+    {
+        return solat_response((new NearbyProvider($key))
+            ->getNearbyLocation('mosque', $latitude, $longitude, $radius));
     }
 
     public function getLocations($state = null)
