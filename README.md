@@ -1,4 +1,4 @@
-# E-Solat Malaysia (In Maintainance)
+# E-Solat Malaysia
 [![Build Status](https://travis-ci.org/afiqiqmal/Esolat-Malaysia.svg?branch=master)](https://travis-ci.org/afiqiqmal/Esolat-Malaysia)
 [![Coverage](https://img.shields.io/codecov/c/github/afiqiqmal/Esolat-Malaysia.svg)](https://codecov.io/gh/afiqiqmal/Esolat-Malaysia)
 [![Packagist](https://img.shields.io/packagist/dt/afiqiqmal/Esolat-Malaysia.svg)](https://packagist.org/packages/afiqiqmal/Esolat-Malaysia)
@@ -37,7 +37,7 @@ Refer this for [Location Code](https://github.com/afiqiqmal/Esolat-Malaysia/blob
 $data = esolat()
         ->timeline()
         ->zone('PNG01')
-        ->displayAs(3) // default is 2 (Week)
+        ->displayAs(Period::WEEK)
         ->fetch();
 ```
 
@@ -45,7 +45,7 @@ or Replace with
 ```php
 $data = (new WaktuSolat())
         ->zone('PNG01')
-        ->displayAs(3) // default is 2 (Week)
+        ->displayAs(Period:WEEK)
         ->fetch();
 ```
 
@@ -54,8 +54,17 @@ $data = (new WaktuSolat())
 $response = esolat()
         ->timeline()
         ->zone('PNG01') // P1 or PNG01
-        ->displayAs(1) // must be 1
+        ->displayAs(Period::DAY)
         ->setDate('2018-10-10') // if this is not set, it will automatically get current date
+        ->fetch();
+```
+
+#### Sample for Today
+```php
+$response = esolat()
+        ->timeline()
+        ->zone('PNG01') // P1 or PNG01
+        ->displayAs(Period::TODAY)
         ->fetch();
 ```
 
@@ -64,7 +73,8 @@ $response = esolat()
 $response = esolat()
         ->timeline()
         ->zone('PNG01') // P1 or PNG01
-        ->displayAs(2)
+        ->displayAs(Period::Week)
+        ->setDate('2018-10-10') //if this is set, it will display the date range of startof week to end of week of the date
         ->fetch();
 ```
 
@@ -73,9 +83,8 @@ $response = esolat()
 $data = esolat()
         ->timeline()
         ->zone('P1') // P1 or PNG01
-        ->displayAs(3)
-        ->month(4) // if this is set, displayAs() will automatically use as type '4'
-        ->year(2018)
+        ->displayAs(Period::Month)
+        ->month(4)
         ->fetch();
 ```
 
@@ -84,8 +93,7 @@ $data = esolat()
 $data = esolat()
         ->timeline()
         ->zone('PNG01') // P1 or PNG01
-        ->displayAs(4)
-        ->year(2018)
+        ->displayAs(Period::Year)
         ->fetch();
 ```
 
@@ -95,8 +103,7 @@ $data = esolat()
 $data = esolat()
         ->timeline()
         ->locationProvider(6.6626, 100.3217, GOOGLE API KEY)
-        ->displayAs(4)
-        ->year(2018)
+        ->displayAs(Period::Year)
         ->fetch();
 ```
 To get Only the Address Location
@@ -115,10 +122,11 @@ $location->toArray(); //return Array
 ```
 
 #### Type of Display
-- (1) Day
-- (2) Week
-- (3) Month
-- (4) Year
+- Period::Day
+- Period::Today
+- Period::Week
+- Period::Month
+- Period::Year
 
 
 #### Get Location List By State
@@ -169,113 +177,112 @@ You should getting data similarly like SAMPLE below:
     "code": 200,
     "error": false,
     "data": {
-        "month": "06",
-        "year": "2018",
-        "location": {
-            "state": "Perlis",
-            "zone": "Padang Besar",
-            "jakim_code": "PLS01",
-            "code": "R2",
-            "longitude": 100.3217,
-            "latitude": 6.6626
+        "bearing":"291° 2′ 45″",
+        "location":{
+            "state":"Perlis",
+            "zone":"Padang Besar",
+            "jakim_code":"PLS01",
+            "code":"R2",
+            "longitude":100.3217,
+            "latitude":6.6626
         },
-        "timeline": [
+        "timeline":[
             {
-                "date": "2018-06-02",
-                "hijri_date": "17-Ramadhan-1439",
-                "day": "Saturday",
-                "waktu": {
-                    "imsak": 1527917460,
-                    "subuh": 1527918060,
-                    "syuruk": 1527922980,
-                    "zohor": 1527945540,
-                    "asar": 1527957840,
-                    "maghrib": 1527967800,
-                    "isyak": 1527972360
+                "hijri_date":"1439-9-20",
+                "date":"2018-06-04",
+                "day":"Monday",
+                "waktu":{
+                    "imsak":1528090140,
+                    "subuh":1528090740,
+                    "syuruk":1528095780,
+                    "zohor":1528118340,
+                    "asar":1528130700,
+                    "maghrib":1528140780,
+                    "isyak":1528145280
                 }
             },
             {
-                "date": "2018-06-03",
-                "hijri_date": "18-Ramadhan-1439",
-                "day": "Sunday",
-                "waktu": {
-                    "imsak": 1528003860,
-                    "subuh": 1528004460,
-                    "syuruk": 1528009380,
-                    "zohor": 1528031940,
-                    "asar": 1528044240,
-                    "maghrib": 1528054260,
-                    "isyak": 1528058760
+                "hijri_date":"1439-9-21",
+                "date":"2018-06-05",
+                "day":"Tuesday",
+                "waktu":{
+                    "imsak":1528176540,
+                    "subuh":1528177140,
+                    "syuruk":1528182180,
+                    "zohor":1528204740,
+                    "asar":1528217100,
+                    "maghrib":1528227180,
+                    "isyak":1528231740
                 }
             },
             {
-                "date": "2018-06-04",
-                "hijri_date": "19-Ramadhan-1439",
-                "day": "Monday",
-                "waktu": {
-                    "imsak": 1528090260,
-                    "subuh": 1528090860,
-                    "syuruk": 1528095780,
-                    "zohor": 1528118340,
-                    "asar": 1528130700,
-                    "maghrib": 1528140660,
-                    "isyak": 1528145160
+                "hijri_date":"1439-9-22",
+                "date":"2018-06-06",
+                "day":"Wednesday",
+                "waktu":{
+                    "imsak":1528262940,
+                    "subuh":1528263540,
+                    "syuruk":1528268580,
+                    "zohor":1528291200,
+                    "asar":1528303500,
+                    "maghrib":1528313580,
+                    "isyak":1528318140
                 }
             },
             {
-                "date": "2018-06-05",
-                "hijri_date": "20-Ramadhan-1439",
-                "day": "Tuesday",
-                "waktu": {
-                    "imsak": 1528176660,
-                    "subuh": 1528177260,
-                    "syuruk": 1528182180,
-                    "zohor": 1528204740,
-                    "asar": 1528217100,
-                    "maghrib": 1528227060,
-                    "isyak": 1528231620
+                "hijri_date":"1439-9-23",
+                "date":"2018-06-07",
+                "day":"Thursday",
+                "waktu":{
+                    "imsak":1528349340,
+                    "subuh":1528349940,
+                    "syuruk":1528354980,
+                    "zohor":1528377600,
+                    "asar":1528389900,
+                    "maghrib":1528399980,
+                    "isyak":1528404540
                 }
             },
             {
-                "date": "2018-06-06",
-                "hijri_date": "21-Ramadhan-1439",
-                "day": "Wednesday",
-                "waktu": {
-                    "imsak": 1528263060,
-                    "subuh": 1528263660,
-                    "syuruk": 1528268580,
-                    "zohor": 1528291140,
-                    "asar": 1528303500,
-                    "maghrib": 1528313460,
-                    "isyak": 1528318020
+                "hijri_date":"1439-9-24",
+                "date":"2018-06-08",
+                "day":"Friday",
+                "waktu":{
+                    "imsak":1528435740,
+                    "subuh":1528436340,
+                    "syuruk":1528441380,
+                    "zohor":1528464000,
+                    "asar":1528476360,
+                    "maghrib":1528486440,
+                    "isyak":1528491000
                 }
             },
             {
-                "date": "2018-06-07",
-                "hijri_date": "22-Ramadhan-1439",
-                "day": "Thursday",
-                "waktu": {
-                    "imsak": 1528349520,
-                    "subuh": 1528350120,
-                    "syuruk": 1528354980,
-                    "zohor": 1528377600,
-                    "asar": 1528389900,
-                    "maghrib": 1528399860,
-                    "isyak": 1528404420
+                "hijri_date":"1439-9-25",
+                "date":"2018-06-09",
+                "day":"Saturday",
+                "waktu":{
+                    "imsak":1528522200,
+                    "subuh":1528522800,
+                    "syuruk":1528527840,
+                    "zohor":1528550400,
+                    "asar":1528562760,
+                    "maghrib":1528572840,
+                    "isyak":1528577400
                 }
             },
             {
-                "date": "2018-06-08",
-                "hijri_date": "23-Ramadhan-1439",
-                "day": "Friday",
-                "waktu": {
-                    "imsak": 1528435920,
-                    "subuh": 1528436520,
-                    "syuruk": 1528441380,
-                    "zohor": 1528464000,
-                    "asar": 1528476360,
-                    "maghrib": 1528486320,
-                    "isyak": 1528490880
+                "hijri_date":"1439-9-26",
+                "date":"2018-06-10",
+                "day":"Sunday",
+                "waktu":{
+                    "imsak":1528608600,
+                    "subuh":1528609200,
+                    "syuruk":1528614240,
+                    "zohor":1528636800,
+                    "asar":1528649160,
+                    "maghrib":1528659240,
+                    "isyak":1528663800
                 }
             }
         ]

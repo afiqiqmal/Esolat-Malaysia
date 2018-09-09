@@ -19,15 +19,20 @@ class IslamicCarbon extends Carbon
         return $this->day.'-'.$this->islamic_month.'-'.$this->year;
     }
 
+    public function toDateIslamic()
+    {
+        return $this->year.'-'.$this->month.'-'.$this->day;
+    }
+
     private function getMonthName($i)
     {
         $month  = [
             "Muharram",
             "Safar",
-            "Rabiul Awal",
-            "Rabiul Akhir",
-            "Jamadil Awal",
-            "Jamadil Akhir",
+            "RabiulAwal",
+            "RabiulAkhir",
+            "JamadilAwal",
+            "JamadilAkhir",
             "Rejab",
             "Syaaban",
             "Ramadhan",

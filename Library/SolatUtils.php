@@ -4,26 +4,14 @@ namespace Afiqiqmal\SolatJakim\Library;
 
 class SolatUtils
 {
-    public static function filterType($type)
-    {
-        switch ($type) {
-        case 1:
-            return Constant::YEAR;
-        case 2:
-            return Constant::WEEK;
-        case 3:
-            return Constant::MONTH;
-        case 4:
-            return Constant::YEAR;
-        default:
-            return null;
-        }
-    }
-
     // Correction because of partly is english and partly is malay
     public static function monthCorrection($month)
     {
-        return str_replace('Disember', 'December', $month);
+        foreach (Constant::MONTH_M_BM as $key => $item) {
+            $month = str_replace($item, Constant::MONTH_M[$key], $month);
+        }
+
+        return $month;
     }
 
     public static function searchByDate($list, $date)

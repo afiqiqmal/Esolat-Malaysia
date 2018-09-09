@@ -3,6 +3,7 @@
 namespace Afiqiqmal\SolatJakim\Api;
 
 use Afiqiqmal\SolatJakim\Library\ApiRequest;
+use Afiqiqmal\SolatJakim\Library\Period;
 use Afiqiqmal\SolatJakim\Provider\LocationProvider;
 use Afiqiqmal\SolatJakim\Sources\Location;
 use Afiqiqmal\SolatJakim\Library\Constant;
@@ -10,25 +11,33 @@ use Afiqiqmal\SolatJakim\Library\IslamicDateConverter;
 use Afiqiqmal\SolatJakim\Library\SolatUtils;
 use Afiqiqmal\SolatJakim\Sources\Model\ZoneData;
 use Carbon\Carbon;
+use function Composer\Autoload\includeFile;
 use Symfony\Component\DomCrawler\Crawler;
 
 class WaktuSolat
 {
-    private $url = 'http://www.e-solat.gov.my/web/muatturun.php';
-    private $year = null;
-    private $month = null;
-    private $zone = null;
-    private $state = null;
-    private $type = null;
-    private $type_name = null;
-    private $chosen_date = null;
-    private $latitude = null;
-    private $longitude = null;
-    private $key = null;
+    protected $url = 'https://www.e-solat.gov.my/index.php';
+    protected $year = null;
+    protected $month = null;
+    protected $zone = null;
+    protected $state = null;
+    protected $type = null;
+    /** @var Carbon $chosen_date */
+    protected $chosen_date = null;
+    protected $latitude = null;
+    protected $longitude = null;
+    protected $key = null;
 
-    private $language = SOLAT_LANGUAGE_EN;
+    protected $language = SOLAT_LANGUAGE_EN;
 
-    public function locationProvider($latitude, $longitude, $key = null)
+    public function __construct()
+    {
+        $this->year = date('Y');
+        $this->month = date('m');
+        $this->type = Period::TODAY;
+    }
+
+    public function locationProvider(float $latitude, float $longitude, $key = null)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
@@ -36,40 +45,43 @@ class WaktuSolat
         return $this;
     }
 
-    public function year($year)
+    public function year(int $year)
     {
         $this->year = $year;
         return $this;
     }
 
-    public function month($month)
+    public function month(int $month)
     {
         $this->month = $month;
         return $this;
     }
 
-    public function zone($zone)
+    public function zone(string $zone)
     {
         $this->zone = $zone;
         return $this;
     }
 
-    public function state($state)
+    public function state(string $state)
     {
         $this->state = $state;
         return $this;
     }
 
+    /**
+     * @param Period $type
+     * @return $this
+     */
     public function displayAs($type)
     {
         $this->type = $type;
-        $this->type_name = SolatUtils::filterType($type);
         return $this;
     }
 
     public function setDate($date)
     {
-        $this->chosen_date = $date;
+        $this->chosen_date = Carbon::parse($date);
         return $this;
     }
 
@@ -92,7 +104,7 @@ class WaktuSolat
         }
 
         if (!$this->zone) {
-            return error_response('Zone Is Needed! Please refer to zone code');
+            return error_response('Zone Is Needed! Please refer to zone code or use location provider');
         } else {
             // if location provider is not used, then zone method is use to get zone address data
             if (is_string($this->zone)) {
@@ -104,140 +116,123 @@ class WaktuSolat
             }
         }
 
-        // set default type if not set, default type is WEEK
-        if (!$this->type) {
-            $this->type = Constant::WEEK_VAL;
-            $this->type_name = SolatUtils::filterType($this->type);
-        }
+        if ($this->type == Period::DAY) {
+            $this->type = Period::MONTH;
+            try {
+                if (!$this->chosen_date) {
+                    $this->chosen_date = Carbon::today();
+                }
+                $this->month = $this->chosen_date->month;
+                $this->year = $this->chosen_date->year;
+            } catch (\Exception $exception) {
+                return error_response('Date is Invalid');
+            }
+        } else if ($this->type == Period::WEEK && $this->chosen_date){
+            $this->type = Period::YEAR;
+            try {
+                if (!$this->chosen_date) {
+                    $this->chosen_date = Carbon::today();
+                }
+                $this->month = $this->chosen_date->month;
+                $this->year = $this->chosen_date->year;
+            } catch (\Exception $exception) {
+                return error_response('Date is Invalid');
+            }
 
-        // set default year if not set
-        if (!$this->year) {
-            $this->year = date('Y');
-        }
-
-        // set default month if not set
-        if (!$this->month) {
-            $this->month = date('m');
         } else {
-            // if set month is not the same of current month, we need to use YEAR type, because of jakim only show current month
-            if ($this->month != date('m')) {
-                $this->type = Constant::YEAR_VAL;
-                $this->type_name = SolatUtils::filterType($this->type);
-            }
+            $this->chosen_date = null;
         }
 
-        // check for type if not set
-        if (!$this->type_name) {
-            return error_response("Given type: {$this->type} is not the correct format filter. Please refer to doc");
+        $result = $this->callJakim();
+        if (isset($result['error'])) {
+            return error_response($result['message'], $result['status_code']);
         }
-
-        // filter check for using DAY type
-        if ($this->type == Constant::DAY_VAL) {
-            // if DAY value is not set, then use the current date
-            if ($this->chosen_date) {
-                $date = Carbon::parse($this->chosen_date);
-            } else {
-                $date = Carbon::now();
-            }
-
-            $this->chosen_date = $date->toDateString();
-            $this->month = $date->month;
-            $this->year = $date->year;
-        }
-
-        // filter check for using YEAR type, and must be current month by default. If month is set, then it will act as month not year..
-        if ($this->type == Constant::YEAR_VAL && $this->month == date('m')) {
-            $data = [];
-            // loop all 12 month
-            foreach (Constant::ALL_MONTH as $month) {
-                $this->month = $month;
-                $result = $this->callJakim();
-                $data[] = $this->crawler($result);
-            }
-            return solat_response($data);
-        } else {
-            $result = $this->callJakim();
-            return solat_response($this->crawler($result));
-        }
+        return solat_response($result);
     }
 
     private function callJakim()
     {
         /** @var ZoneData $locationAddress */
         $locationAddress = $this->zone;
-
         try {
             $request = new ApiRequest();
-            return $request
+            $data = $request
                 ->baseUrl($this->url)
                 ->getMethod()
+                ->setHeader([
+                    'User-Agent' => 'E-solat-Malaysia/1.0',
+                    'Accept'     => 'application/json',
+                    'connect_timeout' => 30,
+                    'Cache-Control' => 'no-cache',
+                    'verify' => false,
+                ])
                 ->setRequestBody(
                     [
-                        'year' => $this->year,
-                        'bulan' => $this->month,
-                        'lang' => $this->language,
+                        'r' => 'esolatApi/TakwimSolat',
                         'zone' => $locationAddress->getJakimCode(),
-                        'jenis' => $this->type_name
+                        'period' => $this->type,
+                        'month' => $this->month,
+                        'year' => $this->year,
+                        'lang' => 'en_uk'
                     ]
                 )
-                ->getRaw()
                 ->fetch();
+
+            if (isset($data['body'])) {
+                $data = $data['body'];
+                return [
+                    'bearing' => html_entity_decode($data['bearing']),
+                    'location' => $locationAddress->toArray(),
+                    'timeline' => $this->reJsonDataTimeline($data['prayerTime'])
+                ];
+            }
         } catch (\Exception $e) {
             return null;
         }
+
+        return $data;
     }
 
-    private function crawler($result)
+    private function reJsonDataTimeline($data)
     {
-        if (isset($result['body']) && !preg_match('/(No Record)/', $result['body'])) {
-            $crawler = new Crawler($result['body']);
-            $result = $crawler->filter('table:nth-child(2) tr:not(:first-child)')->each(
-                function (Crawler $node, $x) {
-                    $item = $node->filter('td')->each(
-                        function (Crawler $node, $x) {
-                            return trim_spaces($node->text());
-                        }
-                    );
-
-                    $date = null;
-                    $timeline = [];
-                    foreach ($item as $key => $row) {
-                        if ($key == 0) {
-                            $date = SolatUtils::monthCorrection($row);
-                        }
-
-                        if ($key > 1) {
-                            $format = (preg_match('/[.]/', $row)) ? 'd M Y H.i' : 'd M Y H:i';
-                            $timeline[Constant::WAKTU_SOLAT[$key-2]] =
-                                Carbon::createFromFormat($format, "$date {$this->year} $row")
-                                    ->timestamp;
-                        }
-                    }
-
-                    $date = Carbon::createFromFormat('d M Y', "$date {$this->year}");
-                    $data['date'] = $date->toDateString();
-                    $data['hijri_date'] = IslamicDateConverter::convertToHijri($date)->toDateIslamicString();
-                    $data['day'] = $date->format('l');
-                    $data['waktu'] = $timeline;
-                    return $data;
-                }
-            );
-
-            if ($this->type == Constant::DAY_VAL) {
-                $result = SolatUtils::searchByDate($result, $this->chosen_date);
+        $timeline = [];
+        foreach ($data as $item) {
+            $dateCorrect = SolatUtils::monthCorrection($item['date']);
+            $date = Carbon::createFromFormat('d-M-Y', $dateCorrect);
+            $waktu = null;
+            foreach (Constant::WAKTU_SOLAT_EN as $key => $value) {
+                $waktu[Constant::WAKTU_SOLAT[$key]] = Carbon::createFromFormat('d-M-Y H:i:s', $dateCorrect.' '.$item[$value])->timestamp;
             }
-
-            /** @var ZoneData $locationAddress */
-            $locationAddress = $this->zone->toArray();
-
-            return [
-                'month' => $this->month,
-                'year' => $this->year,
-                'location' => $locationAddress,
-                'timeline' => $result
+            $timeline[] = [
+                'hijri_date' => IslamicDateConverter::convertToHijri($date, -1)->toDateIslamic(),
+                'date' => $date->toDateString(),
+                'day' => $item['day'],
+                'waktu' => $waktu
             ];
         }
 
-        return [];
+        if ($this->chosen_date) {
+            if ($this->type == Period::YEAR) { // which mean the previous type is WEEK if chosen date is exist
+                $start = $this->chosen_date->startOfWeek()->toDateString();
+                $end = $this->chosen_date->endOfWeek()->toDateString();
+
+                return array_values(array_filter($timeline, function ($item) use ($start, $end) {
+                    return Carbon::parse($item['date'])->gte(Carbon::parse($start)) && Carbon::parse($item['date'])->lte(Carbon::parse($end));
+                }));
+
+            } else {
+                return $timeline[array_search($this->chosen_date->toDateString(), array_column($timeline, 'date'))];
+            }
+        }
+
+        if ($this->type == Period::TODAY) {
+            return $timeline[0];
+        }
+
+        if ($this->type == Period::WEEK) {
+            array_pop($timeline); // date return 8. cut to 7
+        }
+
+        return $timeline;
     }
 }

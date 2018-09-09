@@ -4,6 +4,7 @@ namespace Tests;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Afiqiqmal\SolatJakim\Library\Constant;
+use Afiqiqmal\SolatJakim\Library\Period;
 use Afiqiqmal\SolatJakim\Library\SolatUtils;
 use PHPUnit\Framework\TestCase;
 /**
@@ -14,16 +15,14 @@ class SolatUtilsTest extends TestCase
 {
     public function testFilterType()
     {
-        $type = SolatUtils::filterType(1);
-        $this->assertTrue($type == Constant::YEAR);
+        $this->assertTrue('year' == Period::YEAR);
 
-        $type = SolatUtils::filterType(2);
-        $this->assertTrue($type == Constant::WEEK);
+        $this->assertTrue('week' == Period::WEEK);
 
-        $type = SolatUtils::filterType(3);
-        $this->assertTrue($type == Constant::MONTH);
+        $this->assertTrue('month' == Period::MONTH);
 
-        $type = SolatUtils::filterType(4);
-        $this->assertTrue($type == Constant::YEAR);
+        $this->assertTrue('day' == Period::DAY);
+
+        $this->assertTrue('today' == Period::TODAY);
     }
 }

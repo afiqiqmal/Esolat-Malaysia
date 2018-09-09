@@ -3,6 +3,7 @@ namespace Tests;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Afiqiqmal\SolatJakim\Library\Period;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 /**
@@ -16,28 +17,45 @@ class LocationProviderTest extends TestCase
         $response = esolat()
             ->timeline()
             ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(1)
-            ->setDate('2018-10-10')
+            ->displayAs(Period::DAY)
+            ->setDate(date('Y').'-10-10')
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertNotNull($response['data']);
-        $this->assertEquals('Padang Besar', $response['data']['location']['zone']);
-        $this->assertTrue($response['data']['month'] == '10');
-        $this->assertTrue($response['data']['year'] == '2018');
-
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertTrue(isset($response['data']['timeline']));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == 10);
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+        }
 
         $response = esolat()
             ->timeline()
             ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(1)
+            ->displayAs(Period::DAY)
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertNotNull($response['data']);
-        $this->assertEquals('Padang Besar', $response['data']['location']['zone']);
-        $this->assertTrue($response['data']['month'] == date('m'));
-        $this->assertTrue($response['data']['year'] == date('Y'));
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertTrue(isset($response['data']['timeline']));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+        }
+    }
+
+    public function testGetWaktuByTodaySuccess()
+    {
+        $response = esolat()
+            ->timeline()
+            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+            ->displayAs(Period::TODAY)
+            ->fetch();
+
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertTrue(isset($response['data']['timeline']));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+        }
     }
 
     public function testGetWaktuByWeekSuccess()
@@ -45,13 +63,25 @@ class LocationProviderTest extends TestCase
         $response = esolat()
             ->timeline()
             ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(2) // default is 2 (Week)
+            ->displayAs(Period::WEEK)
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertNotNull($response['data']);
-        $this->assertEquals('Padang Besar', $response['data']['location']['zone']);
-        $this->assertEquals(7, count($response['data']['timeline']));
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertEquals(7, count($response['data']['timeline']));
+        }
+
+        $response = esolat()
+            ->timeline()
+            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+            ->displayAs(Period::WEEK)
+            ->setDate(date('Y').'-10-10')
+            ->fetch();
+
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertEquals(7, count($response['data']['timeline']));
+        }
     }
 
     public function testGetWaktuByMonthSuccess()
@@ -59,25 +89,27 @@ class LocationProviderTest extends TestCase
         $response = esolat()
             ->timeline()
             ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(3)
-            ->month(8) // if this is set, displayAs() will automatically use as type '4'
-            ->year(2018)
+            ->displayAs(Period::MONTH)
+            ->month(8)
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertNotNull($response['data']);
-        $this->assertTrue($response['data']['month'] == 8);
-        $date = Carbon::parse($response['data']['timeline'][0]['date']);
-        $this->assertTrue($date->month == 8);
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertTrue(count($response['data']['timeline']) > 0);
+            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == 8);
+        }
 
         $response = esolat()
             ->timeline()
             ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(3)
-            ->year(2018)
+            ->displayAs(Period::MONTH)
             ->fetch();
-        $this->assertFalse($response['error']);
-        $this->assertTrue($response['data']['month'] == date('m'));
+
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertTrue(count($response['data']['timeline']) > 0);
+            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == date('m'));
+        }
     }
 
     public function testGetWaktuByYearSuccess()
@@ -85,14 +117,20 @@ class LocationProviderTest extends TestCase
         $response = esolat()
             ->timeline()
             ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(4)
-            ->year(2018)
+            ->displayAs(Period::YEAR)
             ->fetch();
 
+        if ($response['code'] != 403) {
+            $this->baseCheck($response);
+            $this->assertTrue(count($response['data']['timeline']) > 0);
+        }
+    }
+
+    private function baseCheck($response)
+    {
         $this->assertFalse($response['error']);
         $this->assertNotNull($response['data']);
-        $this->assertNotEmpty($response['data']);
-        $this->assertEquals('Padang Besar', $response['data'][0]['location']['zone']);
-        $this->assertTrue(count($response['data']) == 12);
+        $this->assertTrue(isset($response['data']['bearing']));
+        $this->assertEquals('Padang Besar', $response['data']['location']['zone']);
     }
 }

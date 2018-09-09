@@ -63,8 +63,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 //$data =  \Afiqiqmal\SolatJakim\Sources\Location::getRawData();
 
-$data = (new \Afiqiqmal\SolatJakim\Provider\NearbyProvider("AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ"))
-    ->getNearbyLocation('mosque', 2.9474,101.8451);
+$response = esolat()
+    ->timeline()
+    ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+    ->displayAs(\Afiqiqmal\SolatJakim\Library\Period::DAY)
+    ->fetch();
 
 header('Content-type: application/json');
-echo json_encode($data, JSON_PRETTY_PRINT);
+echo json_encode($response, JSON_PRETTY_PRINT);

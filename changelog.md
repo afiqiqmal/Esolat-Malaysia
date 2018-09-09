@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 3.0 Major Changes
+- Use Jakim API. Jakim changing their UI
+- Fix Json Output
+
 ## 2.1 Add List Nearby Mosque
 - Add List nearby mosque
 - Fix model name

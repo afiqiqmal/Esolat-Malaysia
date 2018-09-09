@@ -25,11 +25,11 @@ if (! function_exists('trim_spaces')) {
 
 if (! function_exists('error_response')) {
 
-    function error_response($message = "Something Went Wrong")
+    function error_response($message = "Something Went Wrong", $code = 400)
     {
-        http_response_code(400);
+        http_response_code($code);
         return [
-            'code' => 400,
+            'code' => $code,
             'error' => true,
             'message' => $message
         ];

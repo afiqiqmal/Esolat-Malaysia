@@ -9,10 +9,9 @@ class ApiRequest
     protected $baseUrl = null;
     protected $requestBody = [];
     protected $param = [];
-    protected $method = SOLAT_METHOD_GET;
+    protected $method = "GET";
     protected $requestUrl = null;
     protected $header = null;
-    protected $appendJson = [];
     protected $isRaw = false;
     protected $initOption = [];
 
@@ -76,26 +75,24 @@ class ApiRequest
         return $this;
     }
 
-    function appendToResult(array $appendJson)
-    {
-        $this->appendJson = $appendJson;
-        return $this;
-    }
-
     function getRaw()
     {
         $this->isRaw = true;
         return $this;
     }
 
-    function fetch($requestUrl = null, $requestBody = [], $method = null, $header = null)
+    function fetch($requestUrl = null, $params = [], $method = null, $header = null)
     {
         if ($requestUrl) {
             $this->requestUrl = $requestUrl;
         }
 
-        if (count($requestBody) > 0) {
-            $this->requestBody = $requestBody;
+        if (count($params) > 0) {
+            $this->requestBody = $params;
+        }
+
+        if (count($this->param) > 0){
+            $this->requestBody = $this->param;
         }
 
         if ($method) {
@@ -110,65 +107,76 @@ class ApiRequest
             throw new \RuntimeException('Base URL need to be set!!');
         }
 
+        if (substr($this->baseUrl, -1) != '/') {
+            $this->baseUrl = $this->baseUrl."/";
+        }
+
         if ($this->requestUrl && substr($this->requestUrl, -1) == "/") {
             $this->requestUrl = ltrim($this->requestUrl, "/");
         }
 
+        if (!$this->requestUrl) {
+            $this->baseUrl = rtrim($this->baseUrl, '/');
+        }
+
         $url = $this->baseUrl . $this->requestUrl;
+
         try {
             $client = new Client();
             switch ($this->method) {
-            case SOLAT_METHOD_GET:
-                $param = [
-                    'query' => $this->requestBody,
-                    'headers' => $this->header
-                ];
-                break;
-            case SOLAT_METHOD_POST:
-                $param = [
-                    'form_params' => $this->requestBody,
-                    'headers' => $this->header
-                ];
-                break;
-            case SOLAT_METHOD_PATCH:
-                $param = [];
-                break;
-            case SOLAT_METHOD_DELETE:
-                $param = [];
-                break;
-            default:
-                $param = null;
-                break;
-            }
-
-            if (!$this->header) {
-                unset($param['headers']);
+                case SOLAT_METHOD_GET:
+                    $param = [
+                        'query' => $this->requestBody,
+                        'headers' => $this->header
+                    ];
+                    break;
+                case SOLAT_METHOD_POST:
+                    $param = [
+                        'form_params' => $this->requestBody,
+                        'headers' => $this->header
+                    ];
+                    break;
+                case SOLAT_METHOD_PATCH:
+                    $param = [
+                        'form_params' => $this->requestBody,
+                        'headers' => $this->header
+                    ];
+                    break;
+                case SOLAT_METHOD_DELETE:
+                    $param = [
+                        'form_params' => $this->requestBody,
+                        'headers' => $this->header
+                    ];
+                    break;
+                default:
+                    $param = null;
+                    break;
             }
             $param = array_merge($param, $this->param);
             $response = $client->request($this->method, $url, $param);
-            $data = [
+
+            return [
                 'error' => false,
                 'body' =>  $this->isRaw ? $response->getBody()->getContents() : json_decode($response->getBody(), true),
                 'header' =>  $response->getHeaders(),
-                'status_code' => $response->getStatusCode(),
+                'status_code' => $response->getStatusCode()
             ];
-
         } catch (\Exception $ex) {
-            $data = [
+            return [
                 'error' => true,
-                'message' => $ex->getMessage(),
-                'reference' => $ex->getTraceAsString(),
-                'status_code' => 400
+                'message' => 'Server is currently unavailable',
+                'reference' => $ex->getMessage(),
+                'status_code' => strpos($ex->getMessage(), 'SSL_ERROR_SYSCALL') !== false ? 403 : 400
             ];
         } catch (GuzzleException $ex) {
-            $data = [
+            return [
                 'error' => true,
-                'message' => $ex->getMessage(),
-                'reference' => $ex->getTraceAsString(),
-                'status_code' => 400
+                'message' => 'Server is currently unavailable',
+                'reference' => $ex->getMessage(),
+                'status_code' => strpos($ex->getMessage(), 'SSL_ERROR_SYSCALL') !== false ? 403 : 400
             ];
         }
 
-        return array_merge($data, $this->appendJson);
+
     }
 }

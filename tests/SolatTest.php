@@ -3,6 +3,7 @@ namespace Tests;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Afiqiqmal\SolatJakim\Library\Period;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 /**
@@ -42,26 +43,45 @@ class SolatTest extends TestCase
         $response = esolat()
             ->timeline()
             ->zone('PNG01')
-            ->displayAs(1)
+            ->displayAs(Period::DAY)
             ->setDate('2018-10-10')
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertNotNull($response['data']);
-        $this->assertTrue($response['data']['month'] == '10');
-        $this->assertTrue($response['data']['year'] == '2018');
-
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == 10);
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+        }
 
         $response = esolat()
             ->timeline()
             ->zone('PNG01')
-            ->displayAs(1)
+            ->displayAs(Period::DAY)
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertNotNull($response['data']);
-        $this->assertTrue($response['data']['month'] == date('m'));
-        $this->assertTrue($response['data']['year'] == date('Y'));
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+        }
+    }
+
+    public function testGetWaktuByTodaySuccess()
+    {
+        $response = esolat()
+            ->timeline()
+            ->zone('PNG01')
+            ->displayAs(Period::TODAY)
+            ->fetch();
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertTrue(isset($response['data']['timeline']));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
+            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+        }
     }
 
     public function testGetWaktuByWeekSuccess()
@@ -69,11 +89,27 @@ class SolatTest extends TestCase
         $response = esolat()
             ->timeline()
             ->zone('PNG01')
-            ->displayAs(2) // default is 2 (Week)
+            ->displayAs(Period::WEEK)
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertTrue(count($response['data']['timeline']) == 7);
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertEquals(7, count($response['data']['timeline']));
+        }
+
+        $response = esolat()
+            ->timeline()
+            ->zone('PNG01')
+            ->displayAs(Period::WEEK)
+            ->setDate(date('Y').'-10-10')
+            ->fetch();
+
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertEquals(7, count($response['data']['timeline']));
+        }
     }
 
     public function testGetWaktuByMonthSuccess()
@@ -81,24 +117,28 @@ class SolatTest extends TestCase
         $response = esolat()
             ->timeline()
             ->zone('PNG01')
-            ->displayAs(3)
+            ->displayAs(Period::MONTH)
             ->month(8) // if this is set, displayAs() will automatically use as type '4'
-            ->year(2018)
             ->fetch();
 
-        $this->assertFalse($response['error']);
-        $this->assertTrue($response['data']['month'] == 8);
-        $date = Carbon::parse($response['data']['timeline'][0]['date']);
-        $this->assertTrue($date->month == 8);
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertTrue(count($response['data']['timeline']) > 0);
+            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == 8);
+        }
 
         $response = esolat()
             ->timeline()
             ->zone('PNG01')
-            ->displayAs(3)
-            ->year(2018)
+            ->displayAs(Period::MONTH)
             ->fetch();
-        $this->assertFalse($response['error']);
-        $this->assertTrue($response['data']['month'] == date('m'));
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertTrue(count($response['data']['timeline']) > 0);
+            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == date('m'));
+        }
     }
 
     public function testGetWaktuByYearSuccess()
@@ -106,22 +146,13 @@ class SolatTest extends TestCase
         $response = esolat()
             ->timeline()
             ->zone('PNG01')
-            ->displayAs(4)
-            ->year(2018)
+            ->displayAs(Period::YEAR)
             ->fetch();
-
-        $this->assertFalse($response['error']);
-        $this->assertTrue(count($response['data']) == 12);
-    }
-
-    public function testDisplayAsFailed()
-    {
-        $response = esolat()
-            ->timeline()
-            ->zone('PNG01')
-            ->displayAs(5)
-            ->fetch();
-        $this->assertTrue($response['error']);
+        if ($response['code'] != 403) {
+            $this->assertFalse($response['error']);
+            $this->assertNotNull($response['data']);
+            $this->assertTrue(count($response['data']['timeline']) > 0);
+        }
     }
 
     public function testZoneFailed()
@@ -129,13 +160,13 @@ class SolatTest extends TestCase
         $response = esolat()
             ->timeline()
             ->zone('PNG02')
-            ->displayAs(4)
+            ->displayAs(Period::YEAR)
             ->fetch();
         $this->assertTrue($response['error']);
 
         $response = esolat()
             ->timeline()
-            ->displayAs(4)
+            ->displayAs(Period::YEAR)
             ->fetch();
         $this->assertTrue($response['error']);
     }
