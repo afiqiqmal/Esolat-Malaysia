@@ -54,18 +54,18 @@ class SolatTest extends TestCase
             $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
         }
 
-        $response = esolat()
-            ->timeline()
-            ->zone('PNG01')
-            ->displayAs(Period::DAY)
-            ->fetch();
-
-        if ($response['code'] != 403) {
-            $this->assertFalse($response['error']);
-            $this->assertNotNull($response['data']);
-            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
-            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
-        }
+//        $response = esolat()
+//            ->timeline()
+//            ->zone('PNG01')
+//            ->displayAs(Period::DAY)
+//            ->fetch();
+//
+//        if ($response['code'] != 403) {
+//            $this->assertFalse($response['error']);
+//            $this->assertNotNull($response['data']);
+//            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
+//            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+//        }
     }
 
     public function testGetWaktuByTodaySuccess()
@@ -98,18 +98,18 @@ class SolatTest extends TestCase
             $this->assertEquals(7, count($response['data']['timeline']));
         }
 
-        $response = esolat()
-            ->timeline()
-            ->zone('PNG01')
-            ->displayAs(Period::WEEK)
-            ->setDate(date('Y').'-10-10')
-            ->fetch();
-
-        if ($response['code'] != 403) {
-            $this->assertFalse($response['error']);
-            $this->assertNotNull($response['data']);
-            $this->assertEquals(7, count($response['data']['timeline']));
-        }
+//        $response = esolat()
+//            ->timeline()
+//            ->zone('PNG01')
+//            ->displayAs(Period::WEEK)
+//            ->setDate(date('Y').'-10-10')
+//            ->fetch();
+//
+//        if ($response['code'] != 403) {
+//            $this->assertFalse($response['error']);
+//            $this->assertNotNull($response['data']);
+//            $this->assertEquals(7, count($response['data']['timeline']));
+//        }
     }
 
     public function testGetWaktuByMonthSuccess()
@@ -128,17 +128,17 @@ class SolatTest extends TestCase
             $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == 8);
         }
 
-        $response = esolat()
-            ->timeline()
-            ->zone('PNG01')
-            ->displayAs(Period::MONTH)
-            ->fetch();
-        if ($response['code'] != 403) {
-            $this->assertFalse($response['error']);
-            $this->assertNotNull($response['data']);
-            $this->assertTrue(count($response['data']['timeline']) > 0);
-            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == date('m'));
-        }
+//        $response = esolat()
+//            ->timeline()
+//            ->zone('PNG01')
+//            ->displayAs(Period::MONTH)
+//            ->fetch();
+//        if ($response['code'] != 403) {
+//            $this->assertFalse($response['error']);
+//            $this->assertNotNull($response['data']);
+//            $this->assertTrue(count($response['data']['timeline']) > 0);
+//            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == date('m'));
+//        }
     }
 
     public function testGetWaktuByYearSuccess()

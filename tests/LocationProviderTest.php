@@ -28,18 +28,18 @@ class LocationProviderTest extends TestCase
             $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
         }
 
-        $response = esolat()
-            ->timeline()
-            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(Period::DAY)
-            ->fetch();
-
-        if ($response['code'] != 403) {
-            $this->baseCheck($response);
-            $this->assertTrue(isset($response['data']['timeline']));
-            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
-            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
-        }
+//        $response = esolat()
+//            ->timeline()
+//            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+//            ->displayAs(Period::DAY)
+//            ->fetch();
+//
+//        if ($response['code'] != 403) {
+//            $this->baseCheck($response);
+//            $this->assertTrue(isset($response['data']['timeline']));
+//            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
+//            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->year == date('Y'));
+//        }
     }
 
     public function testGetWaktuByTodaySuccess()
@@ -71,17 +71,17 @@ class LocationProviderTest extends TestCase
             $this->assertEquals(7, count($response['data']['timeline']));
         }
 
-        $response = esolat()
-            ->timeline()
-            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(Period::WEEK)
-            ->setDate(date('Y').'-10-10')
-            ->fetch();
-
-        if ($response['code'] != 403) {
-            $this->baseCheck($response);
-            $this->assertEquals(7, count($response['data']['timeline']));
-        }
+//        $response = esolat()
+//            ->timeline()
+//            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+//            ->displayAs(Period::WEEK)
+//            ->setDate(date('Y').'-10-10')
+//            ->fetch();
+//
+//        if ($response['code'] != 403) {
+//            $this->baseCheck($response);
+//            $this->assertEquals(7, count($response['data']['timeline']));
+//        }
     }
 
     public function testGetWaktuByMonthSuccess()
@@ -99,17 +99,17 @@ class LocationProviderTest extends TestCase
             $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == 8);
         }
 
-        $response = esolat()
-            ->timeline()
-            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-            ->displayAs(Period::MONTH)
-            ->fetch();
-
-        if ($response['code'] != 403) {
-            $this->baseCheck($response);
-            $this->assertTrue(count($response['data']['timeline']) > 0);
-            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == date('m'));
-        }
+//        $response = esolat()
+//            ->timeline()
+//            ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+//            ->displayAs(Period::MONTH)
+//            ->fetch();
+//
+//        if ($response['code'] != 403) {
+//            $this->baseCheck($response);
+//            $this->assertTrue(count($response['data']['timeline']) > 0);
+//            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == date('m'));
+//        }
     }
 
     public function testGetWaktuByYearSuccess()
