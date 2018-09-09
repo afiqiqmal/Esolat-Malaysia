@@ -6,6 +6,8 @@
  * and open the template in the editor.
  */
 
+use Afiqiqmal\SolatJakim\Library\Period;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 //$response = esolat()
@@ -63,10 +65,16 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 //$data =  \Afiqiqmal\SolatJakim\Sources\Location::getRawData();
 
+//$response = esolat()
+//    ->timeline()
+//    ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
+//    ->displayAs(\Afiqiqmal\SolatJakim\Library\Period::DAY)
+//    ->fetch();
+
 $response = esolat()
     ->timeline()
-    ->locationProvider(6.6626, 100.3217, "AIzaSyA6bZ53e_RhxutbU54IMY_qBB6T9A-iGxQ")
-    ->displayAs(\Afiqiqmal\SolatJakim\Library\Period::DAY)
+    ->zone('PNG01')
+    ->displayAs(Period::DAY)
     ->fetch();
 
 header('Content-type: application/json');

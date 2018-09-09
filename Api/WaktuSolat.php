@@ -162,9 +162,6 @@ class WaktuSolat
                 ->setHeader([
                     'User-Agent' => 'E-solat-Malaysia/1.0',
                     'Accept'     => 'application/json',
-                    'connect_timeout' => 30,
-                    'Cache-Control' => 'no-cache',
-                    'verify' => false,
                 ])
                 ->setRequestBody(
                     [
