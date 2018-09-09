@@ -21,7 +21,7 @@ class LocationProviderTest extends TestCase
             ->setDate(date('Y').'-10-10')
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->baseCheck($response);
             $this->assertTrue(isset($response['data']['timeline']));
             $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == 10);
@@ -34,7 +34,7 @@ class LocationProviderTest extends TestCase
 //            ->displayAs(Period::DAY)
 //            ->fetch();
 //
-//        if ($response['code'] != 403) {
+//        if ($response['code'] == 200) {
 //            $this->baseCheck($response);
 //            $this->assertTrue(isset($response['data']['timeline']));
 //            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
@@ -50,7 +50,7 @@ class LocationProviderTest extends TestCase
             ->displayAs(Period::TODAY)
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->baseCheck($response);
             $this->assertTrue(isset($response['data']['timeline']));
             $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
@@ -66,7 +66,7 @@ class LocationProviderTest extends TestCase
             ->displayAs(Period::WEEK)
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->baseCheck($response);
             $this->assertEquals(7, count($response['data']['timeline']));
         }
@@ -78,7 +78,7 @@ class LocationProviderTest extends TestCase
 //            ->setDate(date('Y').'-10-10')
 //            ->fetch();
 //
-//        if ($response['code'] != 403) {
+//        if ($response['code'] == 200) {
 //            $this->baseCheck($response);
 //            $this->assertEquals(7, count($response['data']['timeline']));
 //        }
@@ -93,7 +93,7 @@ class LocationProviderTest extends TestCase
             ->month(8)
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->baseCheck($response);
             $this->assertTrue(count($response['data']['timeline']) > 0);
             $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == 8);
@@ -105,7 +105,7 @@ class LocationProviderTest extends TestCase
 //            ->displayAs(Period::MONTH)
 //            ->fetch();
 //
-//        if ($response['code'] != 403) {
+//        if ($response['code'] == 200) {
 //            $this->baseCheck($response);
 //            $this->assertTrue(count($response['data']['timeline']) > 0);
 //            $this->assertTrue(Carbon::parse($response['data']['timeline'][0]['date'])->month == date('m'));
@@ -120,7 +120,7 @@ class LocationProviderTest extends TestCase
             ->displayAs(Period::YEAR)
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->baseCheck($response);
             $this->assertTrue(count($response['data']['timeline']) > 0);
         }

@@ -47,7 +47,7 @@ class SolatTest extends TestCase
             ->setDate('2018-10-10')
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->assertFalse($response['error']);
             $this->assertNotNull($response['data']);
             $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == 10);
@@ -60,7 +60,7 @@ class SolatTest extends TestCase
 //            ->displayAs(Period::DAY)
 //            ->fetch();
 //
-//        if ($response['code'] != 403) {
+//        if ($response['code'] == 200) {
 //            $this->assertFalse($response['error']);
 //            $this->assertNotNull($response['data']);
 //            $this->assertTrue(Carbon::parse($response['data']['timeline']['date'])->month == date('m'));
@@ -75,7 +75,7 @@ class SolatTest extends TestCase
             ->zone('PNG01')
             ->displayAs(Period::TODAY)
             ->fetch();
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->assertFalse($response['error']);
             $this->assertNotNull($response['data']);
             $this->assertTrue(isset($response['data']['timeline']));
@@ -92,7 +92,7 @@ class SolatTest extends TestCase
             ->displayAs(Period::WEEK)
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->assertFalse($response['error']);
             $this->assertNotNull($response['data']);
             $this->assertEquals(7, count($response['data']['timeline']));
@@ -105,7 +105,7 @@ class SolatTest extends TestCase
 //            ->setDate(date('Y').'-10-10')
 //            ->fetch();
 //
-//        if ($response['code'] != 403) {
+//        if ($response['code'] == 200) {
 //            $this->assertFalse($response['error']);
 //            $this->assertNotNull($response['data']);
 //            $this->assertEquals(7, count($response['data']['timeline']));
@@ -121,7 +121,7 @@ class SolatTest extends TestCase
             ->month(8) // if this is set, displayAs() will automatically use as type '4'
             ->fetch();
 
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->assertFalse($response['error']);
             $this->assertNotNull($response['data']);
             $this->assertTrue(count($response['data']['timeline']) > 0);
@@ -133,7 +133,7 @@ class SolatTest extends TestCase
 //            ->zone('PNG01')
 //            ->displayAs(Period::MONTH)
 //            ->fetch();
-//        if ($response['code'] != 403) {
+//        if ($response['code'] == 200) {
 //            $this->assertFalse($response['error']);
 //            $this->assertNotNull($response['data']);
 //            $this->assertTrue(count($response['data']['timeline']) > 0);
@@ -148,7 +148,7 @@ class SolatTest extends TestCase
             ->zone('PNG01')
             ->displayAs(Period::YEAR)
             ->fetch();
-        if ($response['code'] != 403) {
+        if ($response['code'] == 200) {
             $this->assertFalse($response['error']);
             $this->assertNotNull($response['data']);
             $this->assertTrue(count($response['data']['timeline']) > 0);
